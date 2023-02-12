@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="webgl-boilerplate.js" defer></script>
+  <script src="shaders.js" defer></script>
+  <script src="line.js" defer></script>
+  <script src="index.js" defer></script>
+  <title>2D CAD</title>
+</head>
+<body>
+  <div class="left-col">
+    <h1>Navigation Menu</h1>
+    <p>These are the models that you've created so far:</p>
+    <p>(Click to edit the model)</p>
+    <div class="left-col-rows">
+      <button id="btn-cancel-selection">Cancel selection</button>
+    </div>
+  </div>
+  <div class="middle-col">
+    <canvas id="c"></canvas>
+  </div>
+  <div class="right-col">
+    <h1 id="right-title">Create a Model</h1>
+    <div class="button-div">
+      <button id="btn-create-line">Create line</button>
+    </div>
+    <div class="button-div">
+      <button id="btn-create-square">Create square</button>
+    </div>
+    <div class="button-div">
+      <button id="btn-create-rectangle">Create rectangle</button>
+    </div>
+    <div class="button-div">
+      <button id="btn-create-polygon">Create polygon</button>
+    </div>
+  </div>
+</body>
+</html>
