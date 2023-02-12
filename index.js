@@ -116,7 +116,7 @@ function refreshLeftColumn() {
 
   /* Listener untuk cancel selection */
   document.querySelector("#btn-cancel-selection").addEventListener("click", () => {
-    rightColumn = document.querySelector(".right-column");
+    rightColumn = document.querySelector(".right-col");
     rightColumn.innerHTML = `
     <h1 id="right-title">Create a Model</h1>
     <div class="button-div">
