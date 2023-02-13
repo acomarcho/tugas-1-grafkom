@@ -26,6 +26,10 @@ lineTranslationUniformLocation = gl.getUniformLocation(
   "u_translation"
 );
 lineRotationUniformLocation = gl.getUniformLocation(lineProgram, "u_rotation");
+lineRotationOriginUniformLocation = gl.getUniformLocation(
+  lineProgram,
+  "u_rotation_origin"
+);
 lineBuffer = gl.createBuffer();
 lineColorBuffer = gl.createBuffer();
 
@@ -51,6 +55,10 @@ rectTranslationUniformLocation = gl.getUniformLocation(
   "u_translation"
 );
 rectRotationUniformLocation = gl.getUniformLocation(rectProgram, "u_rotation");
+rectRotationOriginUniformLocation = gl.getUniformLocation(
+  rectProgram,
+  "u_rotation_origin"
+);
 rectBuffer = gl.createBuffer();
 rectColorBuffer = gl.createBuffer();
 
@@ -167,6 +175,13 @@ function render() {
         lineRef.getRotationComponents()[1]
       );
 
+      /* Set rotation origin */
+      gl.uniform2f(
+        lineRotationOriginUniformLocation,
+        lineRef.vertex1[0],
+        lineRef.vertex1[1]
+      );
+
       /* Gambar! */
       gl.drawArrays(gl.LINES, 0, 2);
     }
@@ -246,6 +261,13 @@ function render() {
         rectRotationUniformLocation,
         rectRef.getRotationComponents()[0],
         rectRef.getRotationComponents()[1]
+      );
+
+      /* Set rotation origin */
+      gl.uniform2f(
+        rectRotationOriginUniformLocation,
+        rectRef.vertexes[0][0],
+        rectRef.vertexes[0][1]
       );
 
       /* Gambar! */

@@ -6,15 +6,18 @@ uniform vec2 u_resolution;
 uniform vec2 u_offset;
 uniform vec2 u_translation;
 uniform vec2 u_rotation;
+uniform vec2 u_rotation_origin;
 varying vec4 v_color;
 
 void main() {
+  vec2 substractOrigin = a_position.xy - u_rotation_origin;
+
   vec2 rotatedPosition = vec2(
-    a_position.x * u_rotation.y + a_position.y * u_rotation.x,
-    a_position.y * u_rotation.y - a_position.x * u_rotation.x
+    substractOrigin.x * u_rotation.y + substractOrigin.y * u_rotation.x,
+    substractOrigin.y * u_rotation.y - substractOrigin.x * u_rotation.x
   );
 
-  vec2 offsetCoordinates = rotatedPosition - u_offset + u_translation;
+  vec2 offsetCoordinates = rotatedPosition - u_offset + u_translation + u_rotation_origin;
   vec2 zeroToOne = offsetCoordinates / u_resolution;
   vec2 zeroToTwo = zeroToOne * 2.0;
   vec2 clipSpace = zeroToTwo - 1.0;
@@ -40,15 +43,18 @@ uniform vec2 u_resolution;
 uniform vec2 u_offset;
 uniform vec2 u_translation;
 uniform vec2 u_rotation;
+uniform vec2 u_rotation_origin;
 varying vec4 v_color;
 
 void main() {
+  vec2 substractOrigin = a_position.xy - u_rotation_origin;
+
   vec2 rotatedPosition = vec2(
-    a_position.x * u_rotation.y + a_position.y * u_rotation.x,
-    a_position.y * u_rotation.y - a_position.x * u_rotation.x
+    substractOrigin.x * u_rotation.y + substractOrigin.y * u_rotation.x,
+    substractOrigin.y * u_rotation.y - substractOrigin.x * u_rotation.x
   );
 
-  vec2 offsetCoordinates = rotatedPosition - u_offset + u_translation;
+  vec2 offsetCoordinates = rotatedPosition - u_offset + u_translation + u_rotation_origin;
   vec2 zeroToOne = offsetCoordinates / u_resolution;
   vec2 zeroToTwo = zeroToOne * 2.0;
   vec2 clipSpace = zeroToTwo - 1.0;
