@@ -160,6 +160,11 @@ function refreshLeftColumn() {
   /* Buat listener untuk setiap instance */
   instances.forEach((instance, idx) => {
     document.querySelector(`#btn-edit-model-${idx + 1}`).addEventListener("click", () => {
+      /* Cancel create action */
+      currentAction = "NONE";
+      clickCount = 0;
+      vertexes = [];
+
       var instanceRef = instance.ref;
       rightColumn = document.querySelector(".right-col");
 
