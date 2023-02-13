@@ -211,7 +211,7 @@ function refreshLeftColumn() {
           render();
         })
 
-        /* Event listener untuk pergerakan vertex 1 */
+        /* Event listener untuk pergerakan vertex 2 */
         document.querySelector("#v2-x").addEventListener("input", () => {
           instanceRef.vertex2[0] = document.querySelector("#v2-x").value;
           render();
