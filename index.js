@@ -29,6 +29,33 @@ lineRotationUniformLocation = gl.getUniformLocation(lineProgram, "u_rotation");
 lineBuffer = gl.createBuffer();
 lineColorBuffer = gl.createBuffer();
 
+/* 2. Untuk persegi */
+
+/* 3. Untuk persegi panjang */
+rectVertexShader = createShader(gl, gl.VERTEX_SHADER, rectVertexShaderScript);
+rectFragmentShader = createShader(
+  gl,
+  gl.FRAGMENT_SHADER,
+  rectFragmentShaderScript
+);
+rectProgram = createProgram(gl, rectVertexShader, rectFragmentShader);
+rectPositionAttributeLocation = gl.getAttribLocation(rectProgram, "a_position");
+rectColorAttributeLocation = gl.getAttribLocation(rectProgram, "a_color");
+rectResolutionUniformLocation = gl.getUniformLocation(
+  rectProgram,
+  "u_resolution"
+);
+rectOffsetUniformLocation = gl.getUniformLocation(rectProgram, "u_offset");
+rectTranslationUniformLocation = gl.getUniformLocation(
+  rectProgram,
+  "u_translation"
+);
+rectRotationUniformLocation = gl.getUniformLocation(rectProgram, "u_rotation");
+rectBuffer = gl.createBuffer();
+rectColorBuffer = gl.createBuffer();
+
+/* 4. Untuk poligon */
+
 /* Instances menyatakan model-model yang harus digambar di layar */
 /* Isinya array of objects, misalkan:
   [
@@ -143,6 +170,87 @@ function render() {
       /* Gambar! */
       gl.drawArrays(gl.LINES, 0, 2);
     }
+
+    if (instance.type === "RECTANGLE") {
+      /* Gambar persegi panjang! */
+      gl.useProgram(rectProgram);
+      const rectRef = instance.ref;
+
+      /* gl.ARRAY_BUFFER = rectBuffer */
+      gl.bindBuffer(gl.ARRAY_BUFFER, rectBuffer);
+
+      /* Masukkan data posisi */
+      var positions = rectRef.getFlattenedVertexes();
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(positions),
+        gl.STATIC_DRAW
+      );
+
+      /* Enable attribute */
+      gl.enableVertexAttribArray(rectPositionAttributeLocation);
+
+      /* Masukkan data ke attribute */
+      gl.vertexAttribPointer(
+        rectPositionAttributeLocation,
+        2,
+        gl.FLOAT,
+        false,
+        0,
+        0
+      );
+
+      /* gl.ARRAY_BUFFER = rectColorBuffer */
+      gl.bindBuffer(gl.ARRAY_BUFFER, rectColorBuffer);
+
+      /* Masukkan data warna */
+      var colors = rectRef.getFlattenedColors();
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+      /* Enable attribute */
+      gl.enableVertexAttribArray(rectColorAttributeLocation);
+
+      /* Masukkan data ke attribute */
+      gl.vertexAttribPointer(
+        rectColorAttributeLocation,
+        4,
+        gl.FLOAT,
+        false,
+        0,
+        0
+      );
+
+      /* Set resolusi */
+      gl.uniform2f(
+        rectResolutionUniformLocation,
+        gl.canvas.width,
+        gl.canvas.height
+      );
+
+      /* Set offset */
+      gl.uniform2f(
+        rectOffsetUniformLocation,
+        canvas.getBoundingClientRect().left,
+        canvas.getBoundingClientRect().top
+      );
+
+      /* Set translation */
+      gl.uniform2f(
+        rectTranslationUniformLocation,
+        rectRef.translation[0],
+        rectRef.translation[1]
+      );
+
+      /* Set rotation */
+      gl.uniform2f(
+        rectRotationUniformLocation,
+        rectRef.getRotationComponents()[0],
+        rectRef.getRotationComponents()[1]
+      );
+
+      /* Gambar! */
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
   });
 }
 
@@ -170,6 +278,22 @@ function initiateCreateClickListeners() {
 
     document.querySelector("#right-title").textContent = "Creating a line...";
   });
+
+  /* Membuat persegi */
+
+  /* Membuat persegi panjang */
+  document.querySelector("#btn-create-rectangle").addEventListener("click", () => {
+    currentAction = "RECTANGLE";
+    clickCount = 0;
+    vertexes = [];
+
+    alert(`Untuk membuat sebuah persegi panjang:
+    1. Klik suatu posisi pada kanvas untuk menandai titik kiri atas persegi panjang
+    2. Isi prompt panjang (1 - ${canvas.getBoundingClientRect().width})
+    3. Isi prompt lebar (1 - ${canvas.getBoundingClientRect().height})`)
+  })
+
+  /* Membuat poligon */
 }
 initiateCreateClickListeners();
 
@@ -439,6 +563,56 @@ canvas.addEventListener("click", (e) => {
       clickCount = 0;
       vertexes = [];
     }
+  }
+
+  if (currentAction === "RECTANGLE") {
+    vertexes.push([e.clientX, e.clientY]);
+    let validLength = 0;
+    let validWidth = 0;
+
+    while (!validLength) {
+      let length = prompt(`Enter length of rectangle: (1-${canvas.getBoundingClientRect().width}), 0 to cancel`)
+      if (isNaN(length)) {
+        continue;
+      }
+      if (parseInt(length) === 0) {
+        clickCount = 0;
+        vertexes = [];
+        return;
+      }
+      if (length < 1 || length > canvas.getBoundingClientRect().width) {
+        continue;
+      }
+      validLength = parseInt(length);
+    }
+
+    while (!validWidth) {
+      let width = prompt(`Enter width of rectangle: (1-${canvas.getBoundingClientRect().height}), 0 to cancel`)
+      if (isNaN(width)) {
+        continue;
+      }
+      if (parseInt(width)  ===0) {
+        clickCount = 0;
+        vertexes = [];
+        return;
+      }
+      if (width < 1 || width > canvas.getBoundingClientRect().height) {
+        continue;
+      }
+      validWidth = parseInt(width);
+    }
+
+    const rect = new Rectangle([vertexes[0][0], vertexes[0][1]], validLength, validWidth);
+    instances.push({
+      type: "RECTANGLE",
+      ref: rect
+    });
+
+    render();
+    refreshLeftColumn();
+
+    clickCount = 0;
+    vertexes = [];
   }
 });
 
