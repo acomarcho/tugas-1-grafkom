@@ -68,7 +68,7 @@ function render() {
       gl.uniform2f(lineTranslationUniformLocation, lineRef.translation[0], lineRef.translation[1]);
 
       /* Set rotation */
-      gl.uniform2f(lineRotationUniformLocation, lineRef.rotation[0], lineRef.rotation[1]);
+      gl.uniform2f(lineRotationUniformLocation, lineRef.getRotationComponents()[0], lineRef.getRotationComponents()[1]);
 
       /* Gambar! */
       gl.drawArrays(gl.LINES, 0, 2);
@@ -142,6 +142,8 @@ function refreshLeftColumn() {
   /* Buat listener untuk setiap instance */
   instances.forEach((instance, idx) => {
     document.querySelector(`#btn-edit-model-${idx + 1}`).addEventListener("click", () => {
+      var instanceRef = instance.ref;
+
       rightColumn = document.querySelector(".right-col");
       rightColumn.innerHTML = `
         <h1 id="right-title">Editing instance ${idx + 1} (${instance.type})...</h1>
@@ -149,21 +151,19 @@ function refreshLeftColumn() {
           <h3>Translation</h3>
           <div>
             X:
-            <input type="range" min="-${canvas.getBoundingClientRect().width}" max="${canvas.getBoundingClientRect().width}" value="0" step="1" id="x-translate">
+            <input type="range" min="-${canvas.getBoundingClientRect().width}" max="${canvas.getBoundingClientRect().width}" value="${instanceRef.translation[0]}" step="1" id="x-translate">
           </div>
           <div>
             Y:
-            <input type="range" min="-${canvas.getBoundingClientRect().height}" max="${canvas.getBoundingClientRect().height}" value="0" step="1" id="y-translate">
+            <input type="range" min="-${canvas.getBoundingClientRect().height}" max="${canvas.getBoundingClientRect().height}" value="${instanceRef.translation[1]}" step="1" id="y-translate">
           </div>
           <h3>Rotation</h3>
           <div>
             Angle:
-            <input type="range" min="0" max="360" value="0" step="1" id="rotate">
+            <input type="range" min="0" max="360" value="${instanceRef.rotation}" step="1" id="rotate">
           </div>
         </div>
       `;
-
-      var instanceRef = instance.ref;
 
       /* Event listener untuk translation (harusnya untuk semua model sama) */
       document.querySelector("#x-translate").addEventListener("input", () => {
@@ -174,11 +174,10 @@ function refreshLeftColumn() {
         instanceRef.translation[1] = document.querySelector("#y-translate").value;
         render();
       })
+
+      /* Event listener untuk rotation (harusnya untuk semua model sama) */
       document.querySelector("#rotate").addEventListener("input", () => {
-        var angleInDegrees = 360 - document.querySelector("#rotate").value;
-        var angleInRadians = angleInDegrees * Math.PI / 180;
-        instanceRef.rotation[0] = Math.sin(angleInRadians);
-        instanceRef.rotation[1] = Math.cos(angleInRadians);
+        instanceRef.rotation = document.querySelector("#rotate").value;
         render();
       })
     })

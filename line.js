@@ -4,6 +4,12 @@ class Line {
     this.vertex1 = vertex1;
     this.vertex2 = vertex2;
     this.translation = [0, 0];
-    this.rotation = [0, 1];
+    this.rotation = 0;
+  }
+
+  getRotationComponents() {
+    var angleInDegrees = 360 - this.rotation;
+    var angleInRadians = angleInDegrees * Math.PI / 180;
+    return [Math.sin(angleInRadians), Math.cos(angleInRadians)];
   }
 }
