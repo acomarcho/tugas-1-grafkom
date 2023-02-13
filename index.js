@@ -14,6 +14,7 @@ linePositionAttributeLocation = gl.getAttribLocation(lineProgram, "a_position");
 lineResolutionUniformLocation = gl.getUniformLocation(lineProgram, "u_resolution");
 lineOffsetUniformLocation = gl.getUniformLocation(lineProgram, "u_offset");
 lineTranslationUniformLocation = gl.getUniformLocation(lineProgram, "u_translation");
+lineRotationUniformLocation = gl.getUniformLocation(lineProgram, "u_rotation");
 lineBuffer = gl.createBuffer();
 
 /* Instances menyatakan model-model yang harus digambar di layar */
@@ -65,6 +66,9 @@ function render() {
 
       /* Set translation */
       gl.uniform2f(lineTranslationUniformLocation, lineRef.translation[0], lineRef.translation[1]);
+
+      /* Set rotation */
+      gl.uniform2f(lineRotationUniformLocation, lineRef.rotation[0], lineRef.rotation[1]);
 
       /* Gambar! */
       gl.drawArrays(gl.LINES, 0, 2);
@@ -151,6 +155,11 @@ function refreshLeftColumn() {
             Y:
             <input type="range" min="-${canvas.getBoundingClientRect().height}" max="${canvas.getBoundingClientRect().height}" value="0" step="1" id="y-translate">
           </div>
+          <h3>Rotation</h3>
+          <div>
+            Angle:
+            <input type="range" min="0" max="360" value="0" step="1" id="rotate">
+          </div>
         </div>
       `;
 
@@ -158,13 +167,18 @@ function refreshLeftColumn() {
 
       /* Event listener untuk translation (harusnya untuk semua model sama) */
       document.querySelector("#x-translate").addEventListener("input", () => {
-        console.log(instance);
         instanceRef.translation[0] = document.querySelector("#x-translate").value;
         render();
       })
       document.querySelector("#y-translate").addEventListener("input", () => {
-        console.log(instance);
         instanceRef.translation[1] = document.querySelector("#y-translate").value;
+        render();
+      })
+      document.querySelector("#rotate").addEventListener("input", () => {
+        var angleInDegrees = 360 - document.querySelector("#rotate").value;
+        var angleInRadians = angleInDegrees * Math.PI / 180;
+        instanceRef.rotation[0] = Math.sin(angleInRadians);
+        instanceRef.rotation[1] = Math.cos(angleInRadians);
         render();
       })
     })
