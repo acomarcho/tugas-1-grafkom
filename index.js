@@ -11,11 +11,13 @@ lineVertexShader = createShader(gl, gl.VERTEX_SHADER, lineVertexShaderScript);
 lineFragmentShader = createShader(gl, gl.FRAGMENT_SHADER, lineFragmentShaderScript);
 lineProgram = createProgram(gl, lineVertexShader, lineFragmentShader);
 linePositionAttributeLocation = gl.getAttribLocation(lineProgram, "a_position");
+lineColorAttributeLocation = gl.getAttribLocation(lineProgram, "a_color");
 lineResolutionUniformLocation = gl.getUniformLocation(lineProgram, "u_resolution");
 lineOffsetUniformLocation = gl.getUniformLocation(lineProgram, "u_offset");
 lineTranslationUniformLocation = gl.getUniformLocation(lineProgram, "u_translation");
 lineRotationUniformLocation = gl.getUniformLocation(lineProgram, "u_rotation");
 lineBuffer = gl.createBuffer();
+lineColorBuffer = gl.createBuffer();
 
 /* Instances menyatakan model-model yang harus digambar di layar */
 /* Isinya array of objects, misalkan:
@@ -45,7 +47,7 @@ function render() {
       /* gl.ARRAY_BUFFER = lineBuffer */
       gl.bindBuffer(gl.ARRAY_BUFFER, lineBuffer);
 
-      /* Masukkan data */
+      /* Masukkan data posisi */
       var positions = [
         lineRef.vertex1[0], lineRef.vertex1[1],
         lineRef.vertex2[0], lineRef.vertex2[1]
@@ -57,6 +59,22 @@ function render() {
 
       /* Masukkan data ke attribute */
       gl.vertexAttribPointer(linePositionAttributeLocation, 2, gl.FLOAT, false, 0, 0); 
+
+      /* gl.ARRAY_BUFFER = lineColorBuffer */
+      gl.bindBuffer(gl.ARRAY_BUFFER, lineColorBuffer);
+
+      /* Masukkan data warna */
+      var colors = [
+        lineRef.vertex1_color[0], lineRef.vertex1_color[1], lineRef.vertex1_color[2], lineRef.vertex1_color[3],
+        lineRef.vertex2_color[0], lineRef.vertex2_color[1], lineRef.vertex2_color[2], lineRef.vertex2_color[3] 
+      ];
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+      /* Enable attribute */
+      gl.enableVertexAttribArray(lineColorAttributeLocation);
+
+      /* Masukkan data ke attribute */
+      gl.vertexAttribPointer(lineColorAttributeLocation, 4, gl.FLOAT, false, 0, 0);
 
       /* Set resolusi */
       gl.uniform2f(lineResolutionUniformLocation, gl.canvas.width, gl.canvas.height);
@@ -173,6 +191,17 @@ function refreshLeftColumn() {
               Y:
               <input type="range" min="${canvas.getBoundingClientRect().top}" max="${canvas.getBoundingClientRect().bottom}" value="${instanceRef.vertex1[1]}" step="1" id="v1-y">
             </div>
+            <h4>Color values (0 - 1)</h4>
+            <div>
+              R:
+              <input type="number" min="0" max="1" value="${instanceRef.vertex1_color[0]}" id="v1-r">
+              G:
+              <input type="number" min="0" max="1" value="${instanceRef.vertex1_color[1]}" id="v1-g">
+              B:
+              <input type="number" min="0" max="1" value="${instanceRef.vertex1_color[2]}" id="v1-b">
+              A:
+              <input type="number" min="0" max="1" value="${instanceRef.vertex1_color[3]}" id="v1-a">
+            </div>
             <h3>Vertex 2</h3>
             <div>
               X:
@@ -181,6 +210,17 @@ function refreshLeftColumn() {
             <div>
               Y:
               <input type="range" min="${canvas.getBoundingClientRect().top}" max="${canvas.getBoundingClientRect().bottom}" value="${instanceRef.vertex2[1]}" step="1" id="v2-y">
+            </div>
+            <h4>Color values (0 - 1)</h4>
+            <div>
+              R:
+              <input type="number" min="0" max="1" value="${instanceRef.vertex2_color[0]}" id="v2-r">
+              G:
+              <input type="number" min="0" max="1" value="${instanceRef.vertex2_color[1]}" id="v2-g">
+              B:
+              <input type="number" min="0" max="1" value="${instanceRef.vertex2_color[2]}" id="v2-b">
+              A:
+              <input type="number" min="0" max="1" value="${instanceRef.vertex2_color[3]}" id="v2-a">
             </div>
           </div>
         `;
@@ -201,7 +241,7 @@ function refreshLeftColumn() {
           render();
         })
 
-        /* Event listener untuk pergerakan vertex 1 */
+        /* Event listener untuk vertex 1 */
         document.querySelector("#v1-x").addEventListener("input", () => {
           instanceRef.vertex1[0] = document.querySelector("#v1-x").value;
           render();
@@ -210,14 +250,46 @@ function refreshLeftColumn() {
           instanceRef.vertex1[1] = document.querySelector("#v1-y").value;
           render();
         })
+        document.querySelector("#v1-r").addEventListener("input", () => {
+          instanceRef.vertex1_color[0] = document.querySelector("#v1-r").value;
+          render();
+        })
+        document.querySelector("#v1-g").addEventListener("input", () => {
+          instanceRef.vertex1_color[1] = document.querySelector("#v1-g").value;
+          render();
+        })
+        document.querySelector("#v1-b").addEventListener("input", () => {
+          instanceRef.vertex1_color[2] = document.querySelector("#v1-b").value;
+          render();
+        })
+        document.querySelector("#v1-a").addEventListener("input", () => {
+          instanceRef.vertex1_color[3] = document.querySelector("#v1-a").value;
+          render();
+        })
 
-        /* Event listener untuk pergerakan vertex 2 */
+        /* Event listener untuk vertex 2 */
         document.querySelector("#v2-x").addEventListener("input", () => {
           instanceRef.vertex2[0] = document.querySelector("#v2-x").value;
           render();
         })
         document.querySelector("#v2-y").addEventListener("input", () => {
           instanceRef.vertex2[1] = document.querySelector("#v2-y").value;
+          render();
+        })
+        document.querySelector("#v2-r").addEventListener("input", () => {
+          instanceRef.vertex2_color[0] = document.querySelector("#v2-r").value;
+          render();
+        })
+        document.querySelector("#v2-g").addEventListener("input", () => {
+          instanceRef.vertex2_color[1] = document.querySelector("#v2-g").value;
+          render();
+        })
+        document.querySelector("#v2-b").addEventListener("input", () => {
+          instanceRef.vertex2_color[2] = document.querySelector("#v2-b").value;
+          render();
+        })
+        document.querySelector("#v2-a").addEventListener("input", () => {
+          instanceRef.vertex2_color[3] = document.querySelector("#v2-a").value;
           render();
         })
       }
