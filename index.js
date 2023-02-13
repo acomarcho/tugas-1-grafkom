@@ -282,16 +282,18 @@ function initiateCreateClickListeners() {
   /* Membuat persegi */
 
   /* Membuat persegi panjang */
-  document.querySelector("#btn-create-rectangle").addEventListener("click", () => {
-    currentAction = "RECTANGLE";
-    clickCount = 0;
-    vertexes = [];
+  document
+    .querySelector("#btn-create-rectangle")
+    .addEventListener("click", () => {
+      currentAction = "RECTANGLE";
+      clickCount = 0;
+      vertexes = [];
 
-    alert(`Untuk membuat sebuah persegi panjang:
+      alert(`Untuk membuat sebuah persegi panjang:
     1. Klik suatu posisi pada kanvas untuk menandai titik kiri atas persegi panjang
     2. Isi prompt panjang (1 - ${canvas.getBoundingClientRect().width})
-    3. Isi prompt lebar (1 - ${canvas.getBoundingClientRect().height})`)
-  })
+    3. Isi prompt lebar (1 - ${canvas.getBoundingClientRect().height})`);
+    });
 
   /* Membuat poligon */
 }
@@ -537,6 +539,105 @@ function refreshLeftColumn() {
               document.querySelector("#v2-a").value;
             render();
           });
+        } else if (instance.type === "RECTANGLE") {
+          /* Semua fungsionalitas LINE! */
+          rightColumn.innerHTML = `
+          <h1 id="right-title">Editing instance ${idx + 1} (${
+            instance.type
+          })...</h1>
+          <div>
+            <h3>Translation</h3>
+            <div>
+              X:
+              <input type="range" min="-${
+                canvas.getBoundingClientRect().width
+              }" max="${canvas.getBoundingClientRect().width}" value="${
+            instanceRef.translation[0]
+          }" step="1" id="x-translate">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="-${
+                canvas.getBoundingClientRect().height
+              }" max="${canvas.getBoundingClientRect().height}" value="${
+            instanceRef.translation[1]
+          }" step="1" id="y-translate">
+            </div>
+            <h3>Rotation</h3>
+            <div>
+              Angle:
+              <input type="range" min="0" max="360" value="${
+                instanceRef.rotation
+              }" step="1" id="rotate">
+            </div>
+          `;
+
+          /* Tambahkan fungsionalitas vertex */
+          instanceRef.vertexes.forEach((_, i) => {
+            const id = i + 1; // Mempermudah pengerjaan
+            rightColumn.innerHTML += `
+            <h3>Vertex ${id}</h3>
+            <div>
+              X:
+              <input type="range" min="${
+                canvas.getBoundingClientRect().left
+              }" max="${canvas.getBoundingClientRect().right}" value="${
+              instanceRef.vertexes[i][0]
+            }" step="1" id="v${id}-x">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="${
+                canvas.getBoundingClientRect().top
+              }" max="${canvas.getBoundingClientRect().bottom}" value="${
+              instanceRef.vertexes[i][1]
+            }" step="1" id="v${id}-y">
+            </div>
+            <h4>Color values (0 - 1)</h4>
+            <div>
+              R:
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertexColors[i][0]
+              }" id="v${id}-r">
+              G:
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertexColors[i][1]
+              }" id="v${id}-g">
+              B:
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertexColors[i][2]
+              }" id="v${id}-b">
+              A:
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertexColors[i][3]
+              }" id="v${id}-a">
+            </div>
+            `;
+          });
+
+          /* Event listener untuk translation (harusnya untuk semua model sama) */
+          document
+            .querySelector("#x-translate")
+            .addEventListener("input", () => {
+              instanceRef.translation[0] =
+                document.querySelector("#x-translate").value;
+              render();
+            });
+          document
+            .querySelector("#y-translate")
+            .addEventListener("input", () => {
+              instanceRef.translation[1] =
+                document.querySelector("#y-translate").value;
+              render();
+            });
+
+          /* Event listener untuk rotation (harusnya untuk semua model sama) */
+          document.querySelector("#rotate").addEventListener("input", () => {
+            instanceRef.rotation = document.querySelector("#rotate").value;
+            render();
+          });
+
+          /* Event listener untuk fungsionalitas vertex */
         }
       });
   });
@@ -571,7 +672,11 @@ canvas.addEventListener("click", (e) => {
     let validWidth = 0;
 
     while (!validLength) {
-      let length = prompt(`Enter length of rectangle: (1-${canvas.getBoundingClientRect().width}), 0 to cancel`)
+      let length = prompt(
+        `Enter length of rectangle: (1-${
+          canvas.getBoundingClientRect().width
+        }), 0 to cancel`
+      );
       if (isNaN(length)) {
         continue;
       }
@@ -587,11 +692,15 @@ canvas.addEventListener("click", (e) => {
     }
 
     while (!validWidth) {
-      let width = prompt(`Enter width of rectangle: (1-${canvas.getBoundingClientRect().height}), 0 to cancel`)
+      let width = prompt(
+        `Enter width of rectangle: (1-${
+          canvas.getBoundingClientRect().height
+        }), 0 to cancel`
+      );
       if (isNaN(width)) {
         continue;
       }
-      if (parseInt(width)  ===0) {
+      if (parseInt(width) === 0) {
         clickCount = 0;
         vertexes = [];
         return;
@@ -602,10 +711,14 @@ canvas.addEventListener("click", (e) => {
       validWidth = parseInt(width);
     }
 
-    const rect = new Rectangle([vertexes[0][0], vertexes[0][1]], validLength, validWidth);
+    const rect = new Rectangle(
+      [vertexes[0][0], vertexes[0][1]],
+      validLength,
+      validWidth
+    );
     instances.push({
       type: "RECTANGLE",
-      ref: rect
+      ref: rect,
     });
 
     render();
