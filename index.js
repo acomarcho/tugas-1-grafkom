@@ -143,43 +143,84 @@ function refreshLeftColumn() {
   instances.forEach((instance, idx) => {
     document.querySelector(`#btn-edit-model-${idx + 1}`).addEventListener("click", () => {
       var instanceRef = instance.ref;
-
       rightColumn = document.querySelector(".right-col");
-      rightColumn.innerHTML = `
-        <h1 id="right-title">Editing instance ${idx + 1} (${instance.type})...</h1>
-        <div>
-          <h3>Translation</h3>
-          <div>
-            X:
-            <input type="range" min="-${canvas.getBoundingClientRect().width}" max="${canvas.getBoundingClientRect().width}" value="${instanceRef.translation[0]}" step="1" id="x-translate">
-          </div>
-          <div>
-            Y:
-            <input type="range" min="-${canvas.getBoundingClientRect().height}" max="${canvas.getBoundingClientRect().height}" value="${instanceRef.translation[1]}" step="1" id="y-translate">
-          </div>
-          <h3>Rotation</h3>
-          <div>
-            Angle:
-            <input type="range" min="0" max="360" value="${instanceRef.rotation}" step="1" id="rotate">
-          </div>
-        </div>
-      `;
 
-      /* Event listener untuk translation (harusnya untuk semua model sama) */
-      document.querySelector("#x-translate").addEventListener("input", () => {
-        instanceRef.translation[0] = document.querySelector("#x-translate").value;
-        render();
-      })
-      document.querySelector("#y-translate").addEventListener("input", () => {
-        instanceRef.translation[1] = document.querySelector("#y-translate").value;
-        render();
-      })
+      if (instance.type === "LINE") {
+        /* Semua fungsionalitas LINE! */
+        rightColumn.innerHTML = `
+          <h1 id="right-title">Editing instance ${idx + 1} (${instance.type})...</h1>
+          <div>
+            <h3>Translation</h3>
+            <div>
+              X:
+              <input type="range" min="-${canvas.getBoundingClientRect().width}" max="${canvas.getBoundingClientRect().width}" value="${instanceRef.translation[0]}" step="1" id="x-translate">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="-${canvas.getBoundingClientRect().height}" max="${canvas.getBoundingClientRect().height}" value="${instanceRef.translation[1]}" step="1" id="y-translate">
+            </div>
+            <h3>Rotation</h3>
+            <div>
+              Angle:
+              <input type="range" min="0" max="360" value="${instanceRef.rotation}" step="1" id="rotate">
+            </div>
+            <h3>Vertex 1</h3>
+            <div>
+              X:
+              <input type="range" min="${canvas.getBoundingClientRect().left}" max="${canvas.getBoundingClientRect().right}" value="${instanceRef.vertex1[0]}" step="1" id="v1-x">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="${canvas.getBoundingClientRect().top}" max="${canvas.getBoundingClientRect().bottom}" value="${instanceRef.vertex1[1]}" step="1" id="v1-y">
+            </div>
+            <h3>Vertex 2</h3>
+            <div>
+              X:
+              <input type="range" min="${canvas.getBoundingClientRect().left}" max="${canvas.getBoundingClientRect().right}" value="${instanceRef.vertex2[0]}" step="1" id="v2-x">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="${canvas.getBoundingClientRect().top}" max="${canvas.getBoundingClientRect().bottom}" value="${instanceRef.vertex2[1]}" step="1" id="v2-y">
+            </div>
+          </div>
+        `;
+  
+        /* Event listener untuk translation (harusnya untuk semua model sama) */
+        document.querySelector("#x-translate").addEventListener("input", () => {
+          instanceRef.translation[0] = document.querySelector("#x-translate").value;
+          render();
+        })
+        document.querySelector("#y-translate").addEventListener("input", () => {
+          instanceRef.translation[1] = document.querySelector("#y-translate").value;
+          render();
+        })
+  
+        /* Event listener untuk rotation (harusnya untuk semua model sama) */
+        document.querySelector("#rotate").addEventListener("input", () => {
+          instanceRef.rotation = document.querySelector("#rotate").value;
+          render();
+        })
 
-      /* Event listener untuk rotation (harusnya untuk semua model sama) */
-      document.querySelector("#rotate").addEventListener("input", () => {
-        instanceRef.rotation = document.querySelector("#rotate").value;
-        render();
-      })
+        /* Event listener untuk pergerakan vertex 1 */
+        document.querySelector("#v1-x").addEventListener("input", () => {
+          instanceRef.vertex1[0] = document.querySelector("#v1-x").value;
+          render();
+        })
+        document.querySelector("#v1-y").addEventListener("input", () => {
+          instanceRef.vertex1[1] = document.querySelector("#v1-y").value;
+          render();
+        })
+
+        /* Event listener untuk pergerakan vertex 1 */
+        document.querySelector("#v2-x").addEventListener("input", () => {
+          instanceRef.vertex2[0] = document.querySelector("#v2-x").value;
+          render();
+        })
+        document.querySelector("#v2-y").addEventListener("input", () => {
+          instanceRef.vertex2[1] = document.querySelector("#v2-y").value;
+          render();
+        })
+      }
     })
   })
 }
