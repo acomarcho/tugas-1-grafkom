@@ -8,13 +8,23 @@ if (!gl) {
 /* Create program dan shader */
 /* 1. Untuk line */
 lineVertexShader = createShader(gl, gl.VERTEX_SHADER, lineVertexShaderScript);
-lineFragmentShader = createShader(gl, gl.FRAGMENT_SHADER, lineFragmentShaderScript);
+lineFragmentShader = createShader(
+  gl,
+  gl.FRAGMENT_SHADER,
+  lineFragmentShaderScript
+);
 lineProgram = createProgram(gl, lineVertexShader, lineFragmentShader);
 linePositionAttributeLocation = gl.getAttribLocation(lineProgram, "a_position");
 lineColorAttributeLocation = gl.getAttribLocation(lineProgram, "a_color");
-lineResolutionUniformLocation = gl.getUniformLocation(lineProgram, "u_resolution");
+lineResolutionUniformLocation = gl.getUniformLocation(
+  lineProgram,
+  "u_resolution"
+);
 lineOffsetUniformLocation = gl.getUniformLocation(lineProgram, "u_offset");
-lineTranslationUniformLocation = gl.getUniformLocation(lineProgram, "u_translation");
+lineTranslationUniformLocation = gl.getUniformLocation(
+  lineProgram,
+  "u_translation"
+);
 lineRotationUniformLocation = gl.getUniformLocation(lineProgram, "u_rotation");
 lineBuffer = gl.createBuffer();
 lineColorBuffer = gl.createBuffer();
@@ -38,7 +48,7 @@ function render() {
   gl.clearColor(0, 0, 0, 0);
   gl.clear(gl.COLOR_BUFFER_BIT);
   /* Lakukan rendering untuk setiap instance yang ada */
-  instances.forEach(instance => {
+  instances.forEach((instance) => {
     if (instance.type === "LINE") {
       /* Gambar garis! */
       gl.useProgram(lineProgram);
@@ -49,24 +59,43 @@ function render() {
 
       /* Masukkan data posisi */
       var positions = [
-        lineRef.vertex1[0], lineRef.vertex1[1],
-        lineRef.vertex2[0], lineRef.vertex2[1]
+        lineRef.vertex1[0],
+        lineRef.vertex1[1],
+        lineRef.vertex2[0],
+        lineRef.vertex2[1],
       ];
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(positions),
+        gl.STATIC_DRAW
+      );
 
       /* Enable attribute */
       gl.enableVertexAttribArray(linePositionAttributeLocation);
 
       /* Masukkan data ke attribute */
-      gl.vertexAttribPointer(linePositionAttributeLocation, 2, gl.FLOAT, false, 0, 0); 
+      gl.vertexAttribPointer(
+        linePositionAttributeLocation,
+        2,
+        gl.FLOAT,
+        false,
+        0,
+        0
+      );
 
       /* gl.ARRAY_BUFFER = lineColorBuffer */
       gl.bindBuffer(gl.ARRAY_BUFFER, lineColorBuffer);
 
       /* Masukkan data warna */
       var colors = [
-        lineRef.vertex1_color[0], lineRef.vertex1_color[1], lineRef.vertex1_color[2], lineRef.vertex1_color[3],
-        lineRef.vertex2_color[0], lineRef.vertex2_color[1], lineRef.vertex2_color[2], lineRef.vertex2_color[3] 
+        lineRef.vertex1_color[0],
+        lineRef.vertex1_color[1],
+        lineRef.vertex1_color[2],
+        lineRef.vertex1_color[3],
+        lineRef.vertex2_color[0],
+        lineRef.vertex2_color[1],
+        lineRef.vertex2_color[2],
+        lineRef.vertex2_color[3],
       ];
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
@@ -74,24 +103,47 @@ function render() {
       gl.enableVertexAttribArray(lineColorAttributeLocation);
 
       /* Masukkan data ke attribute */
-      gl.vertexAttribPointer(lineColorAttributeLocation, 4, gl.FLOAT, false, 0, 0);
+      gl.vertexAttribPointer(
+        lineColorAttributeLocation,
+        4,
+        gl.FLOAT,
+        false,
+        0,
+        0
+      );
 
       /* Set resolusi */
-      gl.uniform2f(lineResolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+      gl.uniform2f(
+        lineResolutionUniformLocation,
+        gl.canvas.width,
+        gl.canvas.height
+      );
 
       /* Set offset */
-      gl.uniform2f(lineOffsetUniformLocation, canvas.getBoundingClientRect().left, canvas.getBoundingClientRect().top);
+      gl.uniform2f(
+        lineOffsetUniformLocation,
+        canvas.getBoundingClientRect().left,
+        canvas.getBoundingClientRect().top
+      );
 
       /* Set translation */
-      gl.uniform2f(lineTranslationUniformLocation, lineRef.translation[0], lineRef.translation[1]);
+      gl.uniform2f(
+        lineTranslationUniformLocation,
+        lineRef.translation[0],
+        lineRef.translation[1]
+      );
 
       /* Set rotation */
-      gl.uniform2f(lineRotationUniformLocation, lineRef.getRotationComponents()[0], lineRef.getRotationComponents()[1]);
+      gl.uniform2f(
+        lineRotationUniformLocation,
+        lineRef.getRotationComponents()[0],
+        lineRef.getRotationComponents()[1]
+      );
 
       /* Gambar! */
       gl.drawArrays(gl.LINES, 0, 2);
     }
-  })
+  });
 }
 
 /* ============= */
@@ -116,8 +168,8 @@ function initiateCreateClickListeners() {
     1. Klik suatu posisi pada kanvas untuk menandai titik pertama
     2. Klik suatu posisi pada kanvas untuk menandai titik kedua`);
 
-    document.querySelector("#right-title").textContent = "Creating a line..."
-  })
+    document.querySelector("#right-title").textContent = "Creating a line...";
+  });
 }
 initiateCreateClickListeners();
 
@@ -128,8 +180,10 @@ function refreshLeftColumn() {
   /* Tambahkan button untuk setiap model */
   instances.forEach((instance, idx) => {
     htmlContent += `
-      <button id="btn-edit-model-${idx + 1}">Instance ${idx + 1} (${instance.type})</button>
-    `
+      <button id="btn-edit-model-${idx + 1}">Instance ${idx + 1} (${
+      instance.type
+    })</button>
+    `;
   });
   htmlContent += `
     <button id="btn-cancel-selection">Cancel selection</button>
@@ -137,9 +191,11 @@ function refreshLeftColumn() {
   leftColumnRows.innerHTML = htmlContent;
 
   /* Listener untuk cancel selection */
-  document.querySelector("#btn-cancel-selection").addEventListener("click", () => {
-    rightColumn = document.querySelector(".right-col");
-    rightColumn.innerHTML = `
+  document
+    .querySelector("#btn-cancel-selection")
+    .addEventListener("click", () => {
+      rightColumn = document.querySelector(".right-col");
+      rightColumn.innerHTML = `
     <h1 id="right-title">Create a Model</h1>
     <div class="button-div">
       <button id="btn-create-line">Create line</button>
@@ -153,169 +209,229 @@ function refreshLeftColumn() {
     <div class="button-div">
       <button id="btn-create-polygon">Create polygon</button>
     </div>`;
-    /* Reassign click listeners */
-    initiateCreateClickListeners();
-  })
+      /* Reassign click listeners */
+      initiateCreateClickListeners();
+    });
 
   /* Buat listener untuk setiap instance */
   instances.forEach((instance, idx) => {
-    document.querySelector(`#btn-edit-model-${idx + 1}`).addEventListener("click", () => {
-      /* Cancel create action */
-      currentAction = "NONE";
-      clickCount = 0;
-      vertexes = [];
+    document
+      .querySelector(`#btn-edit-model-${idx + 1}`)
+      .addEventListener("click", () => {
+        /* Cancel create action */
+        currentAction = "NONE";
+        clickCount = 0;
+        vertexes = [];
 
-      var instanceRef = instance.ref;
-      rightColumn = document.querySelector(".right-col");
+        var instanceRef = instance.ref;
+        rightColumn = document.querySelector(".right-col");
 
-      if (instance.type === "LINE") {
-        /* Semua fungsionalitas LINE! */
-        rightColumn.innerHTML = `
-          <h1 id="right-title">Editing instance ${idx + 1} (${instance.type})...</h1>
+        if (instance.type === "LINE") {
+          /* Semua fungsionalitas LINE! */
+          rightColumn.innerHTML = `
+          <h1 id="right-title">Editing instance ${idx + 1} (${
+            instance.type
+          })...</h1>
           <div>
             <h3>Translation</h3>
             <div>
               X:
-              <input type="range" min="-${canvas.getBoundingClientRect().width}" max="${canvas.getBoundingClientRect().width}" value="${instanceRef.translation[0]}" step="1" id="x-translate">
+              <input type="range" min="-${
+                canvas.getBoundingClientRect().width
+              }" max="${canvas.getBoundingClientRect().width}" value="${
+            instanceRef.translation[0]
+          }" step="1" id="x-translate">
             </div>
             <div>
               Y:
-              <input type="range" min="-${canvas.getBoundingClientRect().height}" max="${canvas.getBoundingClientRect().height}" value="${instanceRef.translation[1]}" step="1" id="y-translate">
+              <input type="range" min="-${
+                canvas.getBoundingClientRect().height
+              }" max="${canvas.getBoundingClientRect().height}" value="${
+            instanceRef.translation[1]
+          }" step="1" id="y-translate">
             </div>
             <h3>Rotation</h3>
             <div>
               Angle:
-              <input type="range" min="0" max="360" value="${instanceRef.rotation}" step="1" id="rotate">
+              <input type="range" min="0" max="360" value="${
+                instanceRef.rotation
+              }" step="1" id="rotate">
             </div>
             <h3>Vertex 1</h3>
             <div>
               X:
-              <input type="range" min="${canvas.getBoundingClientRect().left}" max="${canvas.getBoundingClientRect().right}" value="${instanceRef.vertex1[0]}" step="1" id="v1-x">
+              <input type="range" min="${
+                canvas.getBoundingClientRect().left
+              }" max="${canvas.getBoundingClientRect().right}" value="${
+            instanceRef.vertex1[0]
+          }" step="1" id="v1-x">
             </div>
             <div>
               Y:
-              <input type="range" min="${canvas.getBoundingClientRect().top}" max="${canvas.getBoundingClientRect().bottom}" value="${instanceRef.vertex1[1]}" step="1" id="v1-y">
+              <input type="range" min="${
+                canvas.getBoundingClientRect().top
+              }" max="${canvas.getBoundingClientRect().bottom}" value="${
+            instanceRef.vertex1[1]
+          }" step="1" id="v1-y">
             </div>
             <h4>Color values (0 - 1)</h4>
             <div>
               R:
-              <input type="number" min="0" max="1" value="${instanceRef.vertex1_color[0]}" id="v1-r">
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertex1_color[0]
+              }" id="v1-r">
               G:
-              <input type="number" min="0" max="1" value="${instanceRef.vertex1_color[1]}" id="v1-g">
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertex1_color[1]
+              }" id="v1-g">
               B:
-              <input type="number" min="0" max="1" value="${instanceRef.vertex1_color[2]}" id="v1-b">
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertex1_color[2]
+              }" id="v1-b">
               A:
-              <input type="number" min="0" max="1" value="${instanceRef.vertex1_color[3]}" id="v1-a">
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertex1_color[3]
+              }" id="v1-a">
             </div>
             <h3>Vertex 2</h3>
             <div>
               X:
-              <input type="range" min="${canvas.getBoundingClientRect().left}" max="${canvas.getBoundingClientRect().right}" value="${instanceRef.vertex2[0]}" step="1" id="v2-x">
+              <input type="range" min="${
+                canvas.getBoundingClientRect().left
+              }" max="${canvas.getBoundingClientRect().right}" value="${
+            instanceRef.vertex2[0]
+          }" step="1" id="v2-x">
             </div>
             <div>
               Y:
-              <input type="range" min="${canvas.getBoundingClientRect().top}" max="${canvas.getBoundingClientRect().bottom}" value="${instanceRef.vertex2[1]}" step="1" id="v2-y">
+              <input type="range" min="${
+                canvas.getBoundingClientRect().top
+              }" max="${canvas.getBoundingClientRect().bottom}" value="${
+            instanceRef.vertex2[1]
+          }" step="1" id="v2-y">
             </div>
             <h4>Color values (0 - 1)</h4>
             <div>
               R:
-              <input type="number" min="0" max="1" value="${instanceRef.vertex2_color[0]}" id="v2-r">
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertex2_color[0]
+              }" id="v2-r">
               G:
-              <input type="number" min="0" max="1" value="${instanceRef.vertex2_color[1]}" id="v2-g">
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertex2_color[1]
+              }" id="v2-g">
               B:
-              <input type="number" min="0" max="1" value="${instanceRef.vertex2_color[2]}" id="v2-b">
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertex2_color[2]
+              }" id="v2-b">
               A:
-              <input type="number" min="0" max="1" value="${instanceRef.vertex2_color[3]}" id="v2-a">
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertex2_color[3]
+              }" id="v2-a">
             </div>
           </div>
         `;
-  
-        /* Event listener untuk translation (harusnya untuk semua model sama) */
-        document.querySelector("#x-translate").addEventListener("input", () => {
-          instanceRef.translation[0] = document.querySelector("#x-translate").value;
-          render();
-        })
-        document.querySelector("#y-translate").addEventListener("input", () => {
-          instanceRef.translation[1] = document.querySelector("#y-translate").value;
-          render();
-        })
-  
-        /* Event listener untuk rotation (harusnya untuk semua model sama) */
-        document.querySelector("#rotate").addEventListener("input", () => {
-          instanceRef.rotation = document.querySelector("#rotate").value;
-          render();
-        })
 
-        /* Event listener untuk vertex 1 */
-        document.querySelector("#v1-x").addEventListener("input", () => {
-          instanceRef.vertex1[0] = document.querySelector("#v1-x").value;
-          render();
-        })
-        document.querySelector("#v1-y").addEventListener("input", () => {
-          instanceRef.vertex1[1] = document.querySelector("#v1-y").value;
-          render();
-        })
-        document.querySelector("#v1-r").addEventListener("input", () => {
-          instanceRef.vertex1_color[0] = document.querySelector("#v1-r").value;
-          render();
-        })
-        document.querySelector("#v1-g").addEventListener("input", () => {
-          instanceRef.vertex1_color[1] = document.querySelector("#v1-g").value;
-          render();
-        })
-        document.querySelector("#v1-b").addEventListener("input", () => {
-          instanceRef.vertex1_color[2] = document.querySelector("#v1-b").value;
-          render();
-        })
-        document.querySelector("#v1-a").addEventListener("input", () => {
-          instanceRef.vertex1_color[3] = document.querySelector("#v1-a").value;
-          render();
-        })
+          /* Event listener untuk translation (harusnya untuk semua model sama) */
+          document
+            .querySelector("#x-translate")
+            .addEventListener("input", () => {
+              instanceRef.translation[0] =
+                document.querySelector("#x-translate").value;
+              render();
+            });
+          document
+            .querySelector("#y-translate")
+            .addEventListener("input", () => {
+              instanceRef.translation[1] =
+                document.querySelector("#y-translate").value;
+              render();
+            });
 
-        /* Event listener untuk vertex 2 */
-        document.querySelector("#v2-x").addEventListener("input", () => {
-          instanceRef.vertex2[0] = document.querySelector("#v2-x").value;
-          render();
-        })
-        document.querySelector("#v2-y").addEventListener("input", () => {
-          instanceRef.vertex2[1] = document.querySelector("#v2-y").value;
-          render();
-        })
-        document.querySelector("#v2-r").addEventListener("input", () => {
-          instanceRef.vertex2_color[0] = document.querySelector("#v2-r").value;
-          render();
-        })
-        document.querySelector("#v2-g").addEventListener("input", () => {
-          instanceRef.vertex2_color[1] = document.querySelector("#v2-g").value;
-          render();
-        })
-        document.querySelector("#v2-b").addEventListener("input", () => {
-          instanceRef.vertex2_color[2] = document.querySelector("#v2-b").value;
-          render();
-        })
-        document.querySelector("#v2-a").addEventListener("input", () => {
-          instanceRef.vertex2_color[3] = document.querySelector("#v2-a").value;
-          render();
-        })
-      }
-    })
-  })
+          /* Event listener untuk rotation (harusnya untuk semua model sama) */
+          document.querySelector("#rotate").addEventListener("input", () => {
+            instanceRef.rotation = document.querySelector("#rotate").value;
+            render();
+          });
+
+          /* Event listener untuk vertex 1 */
+          document.querySelector("#v1-x").addEventListener("input", () => {
+            instanceRef.vertex1[0] = document.querySelector("#v1-x").value;
+            render();
+          });
+          document.querySelector("#v1-y").addEventListener("input", () => {
+            instanceRef.vertex1[1] = document.querySelector("#v1-y").value;
+            render();
+          });
+          document.querySelector("#v1-r").addEventListener("input", () => {
+            instanceRef.vertex1_color[0] =
+              document.querySelector("#v1-r").value;
+            render();
+          });
+          document.querySelector("#v1-g").addEventListener("input", () => {
+            instanceRef.vertex1_color[1] =
+              document.querySelector("#v1-g").value;
+            render();
+          });
+          document.querySelector("#v1-b").addEventListener("input", () => {
+            instanceRef.vertex1_color[2] =
+              document.querySelector("#v1-b").value;
+            render();
+          });
+          document.querySelector("#v1-a").addEventListener("input", () => {
+            instanceRef.vertex1_color[3] =
+              document.querySelector("#v1-a").value;
+            render();
+          });
+
+          /* Event listener untuk vertex 2 */
+          document.querySelector("#v2-x").addEventListener("input", () => {
+            instanceRef.vertex2[0] = document.querySelector("#v2-x").value;
+            render();
+          });
+          document.querySelector("#v2-y").addEventListener("input", () => {
+            instanceRef.vertex2[1] = document.querySelector("#v2-y").value;
+            render();
+          });
+          document.querySelector("#v2-r").addEventListener("input", () => {
+            instanceRef.vertex2_color[0] =
+              document.querySelector("#v2-r").value;
+            render();
+          });
+          document.querySelector("#v2-g").addEventListener("input", () => {
+            instanceRef.vertex2_color[1] =
+              document.querySelector("#v2-g").value;
+            render();
+          });
+          document.querySelector("#v2-b").addEventListener("input", () => {
+            instanceRef.vertex2_color[2] =
+              document.querySelector("#v2-b").value;
+            render();
+          });
+          document.querySelector("#v2-a").addEventListener("input", () => {
+            instanceRef.vertex2_color[3] =
+              document.querySelector("#v2-a").value;
+            render();
+          });
+        }
+      });
+  });
 }
 refreshLeftColumn();
 
 /* Click listener untuk canvas */
 canvas = document.querySelector("#c");
 
-canvas.addEventListener("click", (e) => {;
+canvas.addEventListener("click", (e) => {
   if (currentAction === "LINE") {
     vertexes.push([e.clientX, e.clientY]);
     if (clickCount == 0) {
-      clickCount ++
+      clickCount++;
     } else {
       const line = new Line(vertexes[0], vertexes[1]);
       instances.push({
-        "type": "LINE",
-        "ref": line
+        type: "LINE",
+        ref: line,
       });
       render();
       refreshLeftColumn();
@@ -324,4 +440,60 @@ canvas.addEventListener("click", (e) => {;
       vertexes = [];
     }
   }
-})
+});
+
+/* Click listener untuk fitur export model */
+document.querySelector("#btn-export-models").addEventListener("click", () => {
+  const link = document.createElement("a");
+  const file = new Blob([JSON.stringify(instances)], { type: "text/plain" });
+  link.href = URL.createObjectURL(file);
+  link.download = `model-${new Date().toISOString()}.grafkom`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+});
+
+/* Click listener untuk fitur import model */
+document.querySelector("#btn-import-models").addEventListener("click", () => {
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = ".grafkom";
+
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files && fileInput.files[0]) {
+      var myFile = fileInput.files[0];
+      var reader = new FileReader();
+
+      reader.addEventListener("load", (e) => {
+        try {
+          var _instances = JSON.parse(e.target.result);
+          newInstances = [];
+
+          _instances.forEach(({ type, ref }) => {
+            if (type === "LINE") {
+              /* Proses line */
+              const line = new Line(ref.vertex1, ref.vertex2);
+              line.vertex1_color = ref.vertex1_color;
+              line.vertex2_color = ref.vertex2_color;
+              line.translation = ref.translation;
+              line.rotation = ref.rotation;
+              newInstances.push({
+                type: "LINE",
+                ref: line,
+              });
+            }
+          });
+
+          instances = newInstances;
+          render();
+          refreshLeftColumn();
+        } catch (error) {
+          alert(error);
+        }
+      });
+
+      reader.readAsBinaryString(myFile);
+    }
+  });
+
+  fileInput.click();
+});
