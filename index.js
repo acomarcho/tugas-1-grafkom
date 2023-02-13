@@ -660,6 +660,33 @@ function refreshLeftColumn() {
           });
 
           /* Event listener untuk fungsionalitas vertex */
+          instanceRef.vertexes.forEach((_, i) => {
+            const id = i + 1; // Mempermudah pengerjaan
+            document.querySelector(`#v${id}-x`).addEventListener("input", () => {
+              instanceRef.vertexes[i][0] = document.querySelector(`#v${id}-x`).value;
+              render();
+            })
+            document.querySelector(`#v${id}-y`).addEventListener("input", () => {
+              instanceRef.vertexes[i][1] = document.querySelector(`#v${id}-y`).value;
+              render();
+            })
+            document.querySelector(`#v${id}-r`).addEventListener("input", () => {
+              instanceRef.vertexColors[i][0] = document.querySelector(`#v${id}-r`).value;
+              render();
+            })
+            document.querySelector(`#v${id}-g`).addEventListener("input", () => {
+              instanceRef.vertexColors[i][1] = document.querySelector(`#v${id}-g`).value;
+              render();
+            })
+            document.querySelector(`#v${id}-b`).addEventListener("input", () => {
+              instanceRef.vertexColors[i][2] = document.querySelector(`#v${id}-b`).value;
+              render();
+            })
+            document.querySelector(`#v${id}-a`).addEventListener("input", () => {
+              instanceRef.vertexColors[i][3] = document.querySelector(`#v${id}-a`).value;
+              render();
+            })
+          })
         }
       });
   });
