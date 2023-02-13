@@ -315,6 +315,8 @@ function initiateCreateClickListeners() {
     1. Klik suatu posisi pada kanvas untuk menandai titik kiri atas persegi panjang
     2. Isi prompt panjang (1 - ${canvas.getBoundingClientRect().width})
     3. Isi prompt lebar (1 - ${canvas.getBoundingClientRect().height})`);
+
+      document.querySelector("#right-title").textContent = "Creating a line...";
     });
 
   /* Membuat poligon */
@@ -662,31 +664,55 @@ function refreshLeftColumn() {
           /* Event listener untuk fungsionalitas vertex */
           instanceRef.vertexes.forEach((_, i) => {
             const id = i + 1; // Mempermudah pengerjaan
-            document.querySelector(`#v${id}-x`).addEventListener("input", () => {
-              instanceRef.vertexes[i][0] = document.querySelector(`#v${id}-x`).value;
-              render();
-            })
-            document.querySelector(`#v${id}-y`).addEventListener("input", () => {
-              instanceRef.vertexes[i][1] = document.querySelector(`#v${id}-y`).value;
-              render();
-            })
-            document.querySelector(`#v${id}-r`).addEventListener("input", () => {
-              instanceRef.vertexColors[i][0] = document.querySelector(`#v${id}-r`).value;
-              render();
-            })
-            document.querySelector(`#v${id}-g`).addEventListener("input", () => {
-              instanceRef.vertexColors[i][1] = document.querySelector(`#v${id}-g`).value;
-              render();
-            })
-            document.querySelector(`#v${id}-b`).addEventListener("input", () => {
-              instanceRef.vertexColors[i][2] = document.querySelector(`#v${id}-b`).value;
-              render();
-            })
-            document.querySelector(`#v${id}-a`).addEventListener("input", () => {
-              instanceRef.vertexColors[i][3] = document.querySelector(`#v${id}-a`).value;
-              render();
-            })
-          })
+            document
+              .querySelector(`#v${id}-x`)
+              .addEventListener("input", () => {
+                instanceRef.vertexes[i][0] = document.querySelector(
+                  `#v${id}-x`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-y`)
+              .addEventListener("input", () => {
+                instanceRef.vertexes[i][1] = document.querySelector(
+                  `#v${id}-y`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-r`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][0] = document.querySelector(
+                  `#v${id}-r`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-g`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][1] = document.querySelector(
+                  `#v${id}-g`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-b`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][2] = document.querySelector(
+                  `#v${id}-b`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-a`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][3] = document.querySelector(
+                  `#v${id}-a`
+                ).value;
+                render();
+              });
+          });
         }
       });
   });
@@ -815,6 +841,19 @@ document.querySelector("#btn-import-models").addEventListener("click", () => {
               newInstances.push({
                 type: "LINE",
                 ref: line,
+              });
+            } else if (type === "RECTANGLE") {
+              /* Proses rectangle */
+              const rect = new Rectangle([1, 1], 1, 1);
+              rect.length = ref.length;
+              rect.width = ref.width;
+              rect.vertexes = ref.vertexes;
+              rect.vertexColors = ref.vertexColors;
+              rect.translation = ref.translation;
+              rect.rotation = ref.rotation;
+              newInstances.push({
+                type: "RECTANGLE",
+                ref: rect,
               });
             }
           });
