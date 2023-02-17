@@ -34,6 +34,31 @@ lineBuffer = gl.createBuffer();
 lineColorBuffer = gl.createBuffer();
 
 /* 2. Untuk persegi */
+squareVertexShader = createShader(gl, gl.VERTEX_SHADER, squareVertexShaderScript);
+squareFragmentShader = createShader(
+  gl,
+  gl.FRAGMENT_SHADER,
+  squareFragmentShaderScript
+);
+squareProgram = createProgram(gl, squareVertexShader, squareFragmentShader);
+squarePositionAttributeLocation = gl.getAttribLocation(squareProgram, "a_position");
+squareColorAttributeLocation = gl.getAttribLocation(squareProgram, "a_color");
+squareResolutionUniformLocation = gl.getUniformLocation(
+  squareProgram,
+  "u_resolution"
+);
+squareOffsetUniformLocation = gl.getUniformLocation(squareProgram, "u_offset");
+squareTranslationUniformLocation = gl.getUniformLocation(
+  squareProgram,
+  "u_translation"
+);
+squareRotationUniformLocation = gl.getUniformLocation(squareProgram, "u_rotation");
+squareRotationOriginUniformLocation = gl.getUniformLocation(
+  squareProgram,
+  "u_rotation_origin"
+);
+squareBuffer = gl.createBuffer();
+squareColorBuffer = gl.createBuffer();
 
 /* 3. Untuk persegi panjang */
 rectVertexShader = createShader(gl, gl.VERTEX_SHADER, rectVertexShaderScript);
@@ -186,6 +211,93 @@ function render() {
       gl.drawArrays(gl.LINES, 0, 2);
     }
 
+    if (instance.type === "SQUARE") {
+      /* Gambar persegi! */
+      gl.useProgram(squareProgram);
+      const squareRef = instance.ref;
+    
+      /* gl.ARRAY_BUFFER = squareBuffer */
+      gl.bindBuffer(gl.ARRAY_BUFFER, squareBuffer);
+    
+      /* Masukkan data posisi */
+      var positions = squareRef.getFlattenedVertexes();
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(positions),
+        gl.STATIC_DRAW
+      );
+    
+      /* Enable attribute */
+      gl.enableVertexAttribArray(squarePositionAttributeLocation);
+    
+      /* Masukkan data ke attribute */
+      gl.vertexAttribPointer(
+        squarePositionAttributeLocation,
+        2,
+        gl.FLOAT,
+        false,
+        0,
+        0
+      );
+    
+      /* gl.ARRAY_BUFFER = squareColorBuffer */
+      gl.bindBuffer(gl.ARRAY_BUFFER, squareColorBuffer);
+    
+      /* Masukkan data warna */
+      var colors = squareRef.getFlattenedColors();
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+    
+      /* Enable attribute */
+      gl.enableVertexAttribArray(squareColorAttributeLocation);
+    
+      /* Masukkan data ke attribute */
+      gl.vertexAttribPointer(
+        squareColorAttributeLocation,
+        4,
+        gl.FLOAT,
+        false,
+        0,
+        0
+      );
+    
+      /* Set resolusi */
+      gl.uniform2f(
+        squareResolutionUniformLocation,
+        gl.canvas.width,
+        gl.canvas.height
+      );
+    
+      /* Set offset */
+      gl.uniform2f(
+        squareOffsetUniformLocation,
+        canvas.getBoundingClientRect().left,
+        canvas.getBoundingClientRect().top
+      );
+    
+      /* Set translation */
+      gl.uniform2f(
+        squareTranslationUniformLocation,
+        squareRef.translation[0],
+        squareRef.translation[1]
+      );
+    
+      /* Set rotation */
+      gl.uniform2f(
+        squareRotationUniformLocation,
+        squareRef.getRotationComponents()[0],
+        squareRef.getRotationComponents()[1]
+      );
+      /* Set rotation origin */
+      gl.uniform2f(
+        squareRotationOriginUniformLocation,
+        squareRef.vertexes[0][0],
+        squareRef.vertexes[0][1]
+      );
+    
+      /* Gambar! */
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+
     if (instance.type === "RECTANGLE") {
       /* Gambar persegi panjang! */
       gl.useProgram(rectProgram);
@@ -302,6 +414,19 @@ function initiateCreateClickListeners() {
   });
 
   /* Membuat persegi */
+/* Membuat persegi */
+document.querySelector("#btn-create-square").addEventListener("click", () => {
+  currentAction = "SQUARE";
+  clickCount = 0;
+  vertexes = [];
+
+  alert(`Untuk membuat sebuah persegi:
+  1. Klik suatu posisi pada kanvas untuk menandai titik kiri atas persegi
+  2. Isi prompt besar sisi (1 - ${canvas.getBoundingClientRect().width})`);
+
+  document.querySelector("#right-title").textContent = "Creating a square...";
+});
+
 
   /* Membuat persegi panjang */
   document
@@ -316,7 +441,7 @@ function initiateCreateClickListeners() {
     2. Isi prompt panjang (1 - ${canvas.getBoundingClientRect().width})
     3. Isi prompt lebar (1 - ${canvas.getBoundingClientRect().height})`);
 
-      document.querySelector("#right-title").textContent = "Creating a line...";
+      document.querySelector("#right-title").textContent = "Creating a rectangle...";
     });
 
   /* Membuat poligon */
@@ -563,6 +688,155 @@ function refreshLeftColumn() {
               document.querySelector("#v2-a").value;
             render();
           });
+        } else if (instance.type === "SQUARE") {
+          rightColumn.innerHTML = `
+            <h1 id="right-title">Editing instance ${idx + 1} (${
+              instance.type
+            })...</h1>
+            <div>
+              <h3>Translation</h3>
+              <div>
+                X:
+                <input type="range" min="-${
+                  canvas.getBoundingClientRect().width
+                }" max="${canvas.getBoundingClientRect().width}" value="${
+                  instanceRef.translation[0]
+                }" step="1" id="x-translate">
+              </div>
+              <div>
+                Y:
+                <input type="range" min="-${
+                  canvas.getBoundingClientRect().height
+                }" max="${canvas.getBoundingClientRect().height}" value="${
+                  instanceRef.translation[1]
+                }" step="1" id="y-translate">
+              </div>
+              <h3>Rotation</h3>
+              <div>
+                Angle:
+                <input type="range" min="0" max="360" value="${
+                  instanceRef.rotation
+                }" step="1" id="rotate">
+              </div>
+            `;
+        
+          /* Tambahkan fungsionalitas vertex */
+          instanceRef.vertexes.forEach((_, i) => {
+            const id = i + 1; // Mempermudah pengerjaan
+            rightColumn.innerHTML += `
+            <h3>Vertex ${id}</h3>
+            <div>
+              X:
+              <input type="range" min="${
+                canvas.getBoundingClientRect().left
+              }" max="${canvas.getBoundingClientRect().right}" value="${
+              instanceRef.vertexes[i][0]
+            }" step="1" id="v${id}-x">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="${
+                canvas.getBoundingClientRect().top
+              }" max="${canvas.getBoundingClientRect().bottom}" value="${
+              instanceRef.vertexes[i][1]
+            }" step="1" id="v${id}-y">
+            </div>
+            <h4>Color values (0 - 1)</h4>
+            <div>
+              R:
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertexColors[i][0]
+              }" id="v${id}-r">
+              G:
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertexColors[i][1]
+              }" id="v${id}-g">
+              B:
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertexColors[i][2]
+              }" id="v${id}-b">
+              A:
+              <input type="number" min="0" max="1" value="${
+                instanceRef.vertexColors[i][3]
+              }" id="v${id}-a">
+            </div>
+            `;
+          });
+
+          /* Event listener untuk translation (harusnya untuk semua model sama) */
+          document
+            .querySelector("#x-translate")
+            .addEventListener("input", () => {
+              instanceRef.translation[0] =
+                document.querySelector("#x-translate").value;
+              render();
+            });
+          document
+            .querySelector("#y-translate")
+            .addEventListener("input", () => {
+              instanceRef.translation[1] =
+                document.querySelector("#y-translate").value;
+              render();
+            });
+
+          /* Event listener untuk rotation (harusnya untuk semua model sama) */
+          document.querySelector("#rotate").addEventListener("input", () => {
+            instanceRef.rotation = document.querySelector("#rotate").value;
+            render();
+          });
+
+          /* Event listener untuk fungsionalitas vertex */
+          instanceRef.vertexes.forEach((_, i) => {
+            const id = i + 1; // Mempermudah pengerjaan
+            document
+              .querySelector(`#v${id}-x`)
+              .addEventListener("input", () => {
+                instanceRef.vertexes[i][0] = document.querySelector(
+                  `#v${id}-x`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-y`)
+              .addEventListener("input", () => {
+                instanceRef.vertexes[i][1] = document.querySelector(
+                  `#v${id}-y`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-r`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][0] = document.querySelector(
+                  `#v${id}-r`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-g`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][1] = document.querySelector(
+                  `#v${id}-g`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-b`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][2] = document.querySelector(
+                  `#v${id}-b`
+                ).value;
+                render();
+              });
+            document
+              .querySelector(`#v${id}-a`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][3] = document.querySelector(
+                  `#v${id}-a`
+                ).value;
+                render();
+              });
+          });
         } else if (instance.type === "RECTANGLE") {
           /* Semua fungsionalitas LINE! */
           rightColumn.innerHTML = `
@@ -741,6 +1015,45 @@ canvas.addEventListener("click", (e) => {
     }
   }
 
+  if (currentAction === "SQUARE") {
+
+    vertexes.push([e.clientX, e.clientY]);
+    let validLength = 0;
+  
+    while (!validLength) {
+      let length = prompt(
+        `Enter size of square: (1-${canvas.getBoundingClientRect().width}), 0 to cancel`
+      );
+      if (isNaN(length)) {
+        continue;
+      }
+      if (parseInt(length) === 0) {
+        clickCount = 0;
+        vertexes = [];
+        return;
+      }
+      if (length < 1 || length > canvas.getBoundingClientRect().width) {
+        continue;
+      }
+      validLength = parseInt(length);
+    }
+  
+    const square = new Square(
+      [vertexes[0][0], vertexes[0][1]],
+      validLength
+    );
+    instances.push({
+      type: "SQUARE",
+      ref: square,
+    });
+
+    render();
+    refreshLeftColumn();
+    clickCount = 0;
+    vertexes = [];
+  }
+  
+
   if (currentAction === "RECTANGLE") {
     vertexes.push([e.clientX, e.clientY]);
     let validLength = 0;
@@ -841,6 +1154,18 @@ document.querySelector("#btn-import-models").addEventListener("click", () => {
               newInstances.push({
                 type: "LINE",
                 ref: line,
+              });
+            } else if (type === "SQUARE") {
+              /* proses kotak */
+              const square = new Square([1, 1], 1);
+              square.length = ref.length;
+              square.vertexes = ref.vertexes;
+              square.vertexColors = ref.vertexColors;
+              square.translation = ref.translation;
+              square.rotation = ref.rotation;
+              newInstances.push({
+                type: "SQUARE",
+                ref: square,
               });
             } else if (type === "RECTANGLE") {
               /* Proses rectangle */
