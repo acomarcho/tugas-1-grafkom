@@ -25,6 +25,11 @@ class Polygon {
     this.vertexColors = newVertexColors;
   }
 
+  addVertex(vertex) {
+    this.vertexes.push(vertex)
+    this.vertexColors.push([0, 0, 0, 1]);
+  }
+
   findCentroid() {
     let xSum = 0;
     let ySum = 0;

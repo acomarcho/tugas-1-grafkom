@@ -505,10 +505,11 @@ function render() {
 /* ============= */
 
 /* State untuk menyimpan data apakah sedang menggambar sesuatu/tidak */
-/* Valid values: NONE, LINE, SQUARE, RECTANGLE, POLYGON */
+/* Valid values: NONE, LINE, SQUARE, RECTANGLE, POLYGON, ADD_VERTEX */
 let currentAction = "NONE";
 let clickCount = 0;
 let polygonN = 0;
+let targetPolygon = -1;
 let vertexes = [];
 
 /* Click listener untuk button create <xxx> */
@@ -1169,6 +1170,9 @@ function refreshLeftColumn() {
             instance.type
           })...</h1>
           <div>
+            <button id="add-vertex">Add vertex</button>
+          </div>
+          <div>
             <h3>Translation</h3>
             <div>
               X:
@@ -1240,6 +1244,13 @@ function refreshLeftColumn() {
             </div>
             `;
           });
+
+          /* Event listener untuk add vertex */
+          document.querySelector("#add-vertex").addEventListener("click", () => {
+            window.alert("Untuk menambah vertex, silakan klik suatu titik pada canvas.");
+            currentAction = "ADD_VERTEX";
+            targetPolygon = idx;
+          })
 
           /* Event listener untuk translation (harusnya untuk semua model sama) */
           document
@@ -1353,7 +1364,6 @@ canvas.addEventListener("click", (e) => {
         ref: line,
       });
       render();
-      refreshLeftColumn();
 
       clickCount = 0;
       vertexes = [];
@@ -1391,7 +1401,6 @@ canvas.addEventListener("click", (e) => {
     });
 
     render();
-    refreshLeftColumn();
     clickCount = 0;
     vertexes = [];
   }
@@ -1452,7 +1461,6 @@ canvas.addEventListener("click", (e) => {
     });
 
     render();
-    refreshLeftColumn();
 
     clickCount = 0;
     vertexes = [];
@@ -1469,11 +1477,21 @@ canvas.addEventListener("click", (e) => {
       });
 
       render();
-      refreshLeftColumn();
 
       clickCount = 0;
       vertexes = [];
     }
+  }
+
+  if (currentAction === "ADD_VERTEX") {
+    const plgnRef = instances[targetPolygon].ref;
+    plgnRef.addVertex([e.clientX, e.clientY]);
+    render();
+
+    document.querySelector(`#btn-edit-model-${targetPolygon + 1}`).click();
+
+    currentAction = "NONE";
+    targetPolygon = -1;
   }
 });
 
