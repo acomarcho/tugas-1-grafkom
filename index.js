@@ -88,6 +88,31 @@ rectBuffer = gl.createBuffer();
 rectColorBuffer = gl.createBuffer();
 
 /* 4. Untuk poligon */
+plgnVertexShader = createShader(gl, gl.VERTEX_SHADER, plgnVertexShaderScript);
+plgnFragmentShader = createShader(
+  gl,
+  gl.FRAGMENT_SHADER,
+  plgnFragmentShaderScript
+);
+plgnProgram = createProgram(gl, plgnVertexShader, plgnFragmentShader);
+plgnPositionAttributeLocation = gl.getAttribLocation(plgnProgram, "a_position");
+plgnColorAttributeLocation = gl.getAttribLocation(plgnProgram, "a_color");
+plgnResolutionUniformLocation = gl.getUniformLocation(
+  plgnProgram,
+  "u_resolution"
+);
+plgnOffsetUniformLocation = gl.getUniformLocation(plgnProgram, "u_offset");
+plgnTranslationUniformLocation = gl.getUniformLocation(
+  plgnProgram,
+  "u_translation"
+);
+plgnRotationUniformLocation = gl.getUniformLocation(plgnProgram, "u_rotation");
+plgnRotationOriginUniformLocation = gl.getUniformLocation(
+  plgnProgram,
+  "u_rotation_origin"
+);
+plgnBuffer = gl.createBuffer();
+plgnColorBuffer = gl.createBuffer();
 
 /* Instances menyatakan model-model yang harus digambar di layar */
 /* Isinya array of objects, misalkan:
@@ -387,6 +412,95 @@ function render() {
 
       /* Gambar! */
       gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+
+    if (instance.type === "POLYGON") {
+      /* Gambar polygon! */
+      gl.useProgram(plgnProgram);
+      const plgnRef = instance.ref;
+
+      /* gl.ARRAY_BUFFER = plgnBuffer */
+      gl.bindBuffer(gl.ARRAY_BUFFER, plgnBuffer);
+
+      /* Masukkan data posisi */
+      var positions = plgnRef.getFlattenedVertexes();
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(positions),
+        gl.STATIC_DRAW
+      );
+
+      /* Enable attribute */
+      gl.enableVertexAttribArray(plgnPositionAttributeLocation);
+
+      /* Masukkan data ke attribute */
+      gl.vertexAttribPointer(
+        plgnPositionAttributeLocation,
+        2,
+        gl.FLOAT,
+        false,
+        0,
+        0
+      );
+
+      /* gl.ARRAY_BUFFER = plgnColorBuffer */
+      gl.bindBuffer(gl.ARRAY_BUFFER, plgnColorBuffer);
+
+      /* Masukkan data warna */
+      var colors = plgnRef.getFlattenedColors();
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+      /* Enable attribute */
+      gl.enableVertexAttribArray(plgnColorAttributeLocation);
+
+      /* Masukkan data ke attribute */
+      gl.vertexAttribPointer(
+        plgnColorAttributeLocation,
+        4,
+        gl.FLOAT,
+        false,
+        0,
+        0
+      );
+
+      /* Set resolusi */
+      gl.uniform2f(
+        plgnResolutionUniformLocation,
+        gl.canvas.width,
+        gl.canvas.height
+      );
+
+      /* Set offset */
+      gl.uniform2f(
+        plgnOffsetUniformLocation,
+        canvas.getBoundingClientplgn().left,
+        canvas.getBoundingClientplgn().top
+      );
+
+      /* Set translation */
+      gl.uniform2f(
+        plgnTranslationUniformLocation,
+        plgnRef.translation[0],
+        plgnRef.translation[1]
+      );
+
+      /* Set rotation */
+      gl.uniform2f(
+        plgnRotationUniformLocation,
+        plgnRef.getRotationComponents()[0],
+        plgnRef.getRotationComponents()[1]
+      );
+
+      /* Set rotation origin */
+      const origin = plgnRef.findCentroid()
+      gl.uniform2f(
+        plgnRotationOriginUniformLocation,
+        origin[0],
+        origin[1]
+      );
+
+      /* Gambar! */
+      gl.drawArrays(gl.TRIANGLE_FAN, 0, plgnRef.vertexes.length);
     }
   });
 }
