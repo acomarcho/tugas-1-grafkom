@@ -1520,6 +1520,17 @@ document.querySelector("#btn-import-models").addEventListener("click", () => {
                 type: "RECTANGLE",
                 ref: rect,
               });
+            } else if (type === "POLYGON") {
+              /* Proses polygon */
+              const plgn = new Polygon([]);
+              plgn.vertexes = ref.vertexes;
+              plgn.vertexColors = ref.vertexColors;
+              plgn.translation = ref.translation;
+              plgn.rotation = ref.rotation;
+              newInstances.push({
+                type: "POLYGON",
+                ref: plgn,
+              });
             }
           });
 
