@@ -201,10 +201,11 @@ function render() {
       );
 
       /* Set rotation origin */
+      const origin = lineRef.findCentroid()
       gl.uniform2f(
         lineRotationOriginUniformLocation,
-        lineRef.vertex1[0],
-        lineRef.vertex1[1]
+        origin[0],
+        origin[1]
       );
 
       /* Gambar! */
@@ -288,10 +289,11 @@ function render() {
         squareRef.getRotationComponents()[1]
       );
       /* Set rotation origin */
+      const origin = squareRef.findCentroid()
       gl.uniform2f(
         squareRotationOriginUniformLocation,
-        squareRef.vertexes[0][0],
-        squareRef.vertexes[0][1]
+        origin[0],
+        origin[1]
       );
     
       /* Gambar! */
@@ -376,10 +378,11 @@ function render() {
       );
 
       /* Set rotation origin */
+      const origin = rectRef.findCentroid()
       gl.uniform2f(
         rectRotationOriginUniformLocation,
-        rectRef.vertexes[0][0],
-        rectRef.vertexes[0][1]
+        origin[0],
+        origin[1]
       );
 
       /* Gambar! */
@@ -612,80 +615,80 @@ function refreshLeftColumn() {
             .querySelector("#x-translate")
             .addEventListener("input", () => {
               instanceRef.translation[0] =
-                document.querySelector("#x-translate").value;
+                parseInt(document.querySelector("#x-translate").value);
               render();
             });
           document
             .querySelector("#y-translate")
             .addEventListener("input", () => {
               instanceRef.translation[1] =
-                document.querySelector("#y-translate").value;
+                parseInt(document.querySelector("#y-translate").value);
               render();
             });
 
           /* Event listener untuk rotation (harusnya untuk semua model sama) */
           document.querySelector("#rotate").addEventListener("input", () => {
-            instanceRef.rotation = document.querySelector("#rotate").value;
+            instanceRef.rotation = parseInt(document.querySelector("#rotate").value);
             render();
           });
 
           /* Event listener untuk vertex 1 */
           document.querySelector("#v1-x").addEventListener("input", () => {
-            instanceRef.vertex1[0] = document.querySelector("#v1-x").value;
+            instanceRef.vertex1[0] = parseInt(document.querySelector("#v1-x").value);
             render();
           });
           document.querySelector("#v1-y").addEventListener("input", () => {
-            instanceRef.vertex1[1] = document.querySelector("#v1-y").value;
+            instanceRef.vertex1[1] = parseInt(document.querySelector("#v1-y").value);
             render();
           });
           document.querySelector("#v1-r").addEventListener("input", () => {
             instanceRef.vertex1_color[0] =
-              document.querySelector("#v1-r").value;
+              parseInt(document.querySelector("#v1-r").value);
             render();
           });
           document.querySelector("#v1-g").addEventListener("input", () => {
             instanceRef.vertex1_color[1] =
-              document.querySelector("#v1-g").value;
+              parseInt(document.querySelector("#v1-g").value);
             render();
           });
           document.querySelector("#v1-b").addEventListener("input", () => {
             instanceRef.vertex1_color[2] =
-              document.querySelector("#v1-b").value;
+              parseInt(document.querySelector("#v1-b").value);
             render();
           });
           document.querySelector("#v1-a").addEventListener("input", () => {
             instanceRef.vertex1_color[3] =
-              document.querySelector("#v1-a").value;
+              parseInt(document.querySelector("#v1-a").value);
             render();
           });
 
           /* Event listener untuk vertex 2 */
           document.querySelector("#v2-x").addEventListener("input", () => {
-            instanceRef.vertex2[0] = document.querySelector("#v2-x").value;
+            instanceRef.vertex2[0] = parseInt(document.querySelector("#v2-x").value);
             render();
           });
           document.querySelector("#v2-y").addEventListener("input", () => {
-            instanceRef.vertex2[1] = document.querySelector("#v2-y").value;
+            instanceRef.vertex2[1] = parseInt(document.querySelector("#v2-y").value);
             render();
           });
           document.querySelector("#v2-r").addEventListener("input", () => {
             instanceRef.vertex2_color[0] =
-              document.querySelector("#v2-r").value;
+              parseInt(document.querySelector("#v2-r").value);
             render();
           });
           document.querySelector("#v2-g").addEventListener("input", () => {
             instanceRef.vertex2_color[1] =
-              document.querySelector("#v2-g").value;
+              parseInt(document.querySelector("#v2-g").value);
             render();
           });
           document.querySelector("#v2-b").addEventListener("input", () => {
             instanceRef.vertex2_color[2] =
-              document.querySelector("#v2-b").value;
+              parseInt(document.querySelector("#v2-b").value);
             render();
           });
           document.querySelector("#v2-a").addEventListener("input", () => {
             instanceRef.vertex2_color[3] =
-              document.querySelector("#v2-a").value;
+              parseInt(document.querySelector("#v2-a").value);
             render();
           });
         } else if (instance.type === "SQUARE") {
@@ -768,20 +771,20 @@ function refreshLeftColumn() {
             .querySelector("#x-translate")
             .addEventListener("input", () => {
               instanceRef.translation[0] =
-                document.querySelector("#x-translate").value;
+                parseInt(document.querySelector("#x-translate").value);
               render();
             });
           document
             .querySelector("#y-translate")
             .addEventListener("input", () => {
               instanceRef.translation[1] =
-                document.querySelector("#y-translate").value;
+                parseInt(document.querySelector("#y-translate").value);
               render();
             });
 
           /* Event listener untuk rotation (harusnya untuk semua model sama) */
           document.querySelector("#rotate").addEventListener("input", () => {
-            instanceRef.rotation = document.querySelector("#rotate").value;
+            instanceRef.rotation = parseInt(document.querySelector("#rotate").value);
             render();
           });
 
@@ -791,49 +794,49 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
-                instanceRef.vertexes[i][0] = document.querySelector(
+                instanceRef.vertexes[i][0] = parseInt(document.querySelector(
                   `#v${id}-x`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
-                instanceRef.vertexes[i][1] = document.querySelector(
+                instanceRef.vertexes[i][1] = parseInt(document.querySelector(
                   `#v${id}-y`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-r`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][0] = document.querySelector(
+                instanceRef.vertexColors[i][0] = parseInt(document.querySelector(
                   `#v${id}-r`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-g`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][1] = document.querySelector(
+                instanceRef.vertexColors[i][1] = parseInt(document.querySelector(
                   `#v${id}-g`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-b`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][2] = document.querySelector(
+                instanceRef.vertexColors[i][2] = parseInt(document.querySelector(
                   `#v${id}-b`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-a`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][3] = document.querySelector(
+                instanceRef.vertexColors[i][3] = parseInt(document.querySelector(
                   `#v${id}-a`
-                ).value;
+                ).value);
                 render();
               });
           });
@@ -918,20 +921,20 @@ function refreshLeftColumn() {
             .querySelector("#x-translate")
             .addEventListener("input", () => {
               instanceRef.translation[0] =
-                document.querySelector("#x-translate").value;
+                parseInt(document.querySelector("#x-translate").value);
               render();
             });
           document
             .querySelector("#y-translate")
             .addEventListener("input", () => {
               instanceRef.translation[1] =
-                document.querySelector("#y-translate").value;
+                parseInt(document.querySelector("#y-translate").value);
               render();
             });
 
           /* Event listener untuk rotation (harusnya untuk semua model sama) */
           document.querySelector("#rotate").addEventListener("input", () => {
-            instanceRef.rotation = document.querySelector("#rotate").value;
+            instanceRef.rotation = parseInt(document.querySelector("#rotate").value);
             render();
           });
 
@@ -941,49 +944,49 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
-                instanceRef.vertexes[i][0] = document.querySelector(
+                instanceRef.vertexes[i][0] = parseInt(document.querySelector(
                   `#v${id}-x`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
-                instanceRef.vertexes[i][1] = document.querySelector(
+                instanceRef.vertexes[i][1] = parseInt(document.querySelector(
                   `#v${id}-y`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-r`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][0] = document.querySelector(
+                instanceRef.vertexColors[i][0] = parseInt(document.querySelector(
                   `#v${id}-r`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-g`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][1] = document.querySelector(
+                instanceRef.vertexColors[i][1] = parseInt(document.querySelector(
                   `#v${id}-g`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-b`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][2] = document.querySelector(
+                instanceRef.vertexColors[i][2] = parseInt(document.querySelector(
                   `#v${id}-b`
-                ).value;
+                ).value);
                 render();
               });
             document
               .querySelector(`#v${id}-a`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][3] = document.querySelector(
+                instanceRef.vertexColors[i][3] = parseInt(document.querySelector(
                   `#v${id}-a`
-                ).value;
+                ).value);
                 render();
               });
           });

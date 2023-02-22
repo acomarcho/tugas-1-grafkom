@@ -17,6 +17,13 @@ class Square {
     this.rotation = 0;
   }
 
+  findCentroid() {
+    return [
+      (this.vertexes[0][0] + this.vertexes[1][0] + this.vertexes[2][0] + this.vertexes[3][0]) / 4,
+      (this.vertexes[0][1] + this.vertexes[1][1] + this.vertexes[2][1] + this.vertexes[3][1]) / 4
+    ]
+  }
+
   generateVertexes(ref_vertex) {
     return [
       [ref_vertex[0], ref_vertex[1]], // Titik 0
