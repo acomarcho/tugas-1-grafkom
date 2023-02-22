@@ -26,7 +26,7 @@ class Polygon {
   }
 
   addVertex(vertex) {
-    this.vertexes.push(vertex)
+    this.vertexes.push(vertex);
     this.vertexColors.push([0, 0, 0, 1]);
   }
 
@@ -70,5 +70,48 @@ class Polygon {
     var angleInDegrees = 360 - this.rotation;
     var angleInRadians = (angleInDegrees * Math.PI) / 180;
     return [Math.sin(angleInRadians), Math.cos(angleInRadians)];
+  }
+
+  toConvexHull() {
+    this.vertexes = this.convexHull();
+    this.vertexColors = this.vertexes.map((_) => {
+      return [0, 0, 0, 1];
+    });
+  }
+
+  convexHull() {
+    var points = [...this.vertexes];
+    points.sort(function (a, b) {
+      return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+    });
+
+    var n = points.length;
+    var hull = [];
+
+    for (var i = 0; i < 2 * n; i++) {
+      var j = i < n ? i : 2 * n - 1 - i;
+      while (
+        hull.length >= 2 &&
+        this.removeMiddle(
+          hull[hull.length - 2],
+          hull[hull.length - 1],
+          points[j]
+        )
+      )
+        hull.pop();
+      hull.push(points[j]);
+    }
+
+    hull.pop();
+
+    console.log(hull, points);
+
+    return hull;
+  }
+
+  removeMiddle(a, b, c) {
+    var cross = (a[0] - b[0]) * (c[1] - b[1]) - (a[1] - b[1]) * (c[0] - b[0]);
+    var dot = (a[0] - b[0]) * (c[0] - b[0]) + (a[1] - b[1]) * (c[1] - b[1]);
+    return cross < 0 || (cross == 0 && dot <= 0);
   }
 }

@@ -1228,6 +1228,9 @@ function refreshLeftColumn() {
             <button id="add-vertex">Add vertex</button>
           </div>
           <div>
+            <button id="convex-hull">Convert into convex hull</button>
+          </div>
+          <div>
             <h3>Translation</h3>
             <div>
               X:
@@ -1310,6 +1313,18 @@ function refreshLeftColumn() {
               currentAction = "ADD_VERTEX";
               targetPolygon = idx;
             });
+
+          /* Convex hull */
+          document
+            .querySelector("#convex-hull")
+            .addEventListener("click", () => {
+              window.alert(
+                "NOTICE: Polygon color will be reset due to rearrangements"
+              );
+              instanceRef.toConvexHull();
+              render();
+              clickMyself();
+            })
 
           /* Event listener untuk translation (harusnya untuk semua model sama) */
           document
