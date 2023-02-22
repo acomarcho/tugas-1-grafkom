@@ -583,8 +583,9 @@ function initiateCreateClickListeners() {
         polygonN = parseInt(N);
       }
 
-      document.querySelector("#right-title").textContent =
-        `Creating a polygon of N = ${polygonN}...`;;
+      document.querySelector(
+        "#right-title"
+      ).textContent = `Creating a polygon of N = ${polygonN}...`;
     });
 }
 initiateCreateClickListeners();
@@ -693,19 +694,19 @@ function refreshLeftColumn() {
             <h4>Color values (0 - 1)</h4>
             <div>
               R:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertex1_color[0]
               }" id="v1-r">
               G:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertex1_color[1]
               }" id="v1-g">
               B:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertex1_color[2]
               }" id="v1-b">
               A:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertex1_color[3]
               }" id="v1-a">
             </div>
@@ -729,19 +730,19 @@ function refreshLeftColumn() {
             <h4>Color values (0 - 1)</h4>
             <div>
               R:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertex2_color[0]
               }" id="v2-r">
               G:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertex2_color[1]
               }" id="v2-g">
               B:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertex2_color[2]
               }" id="v2-b">
               A:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertex2_color[3]
               }" id="v2-a">
             </div>
@@ -788,25 +789,25 @@ function refreshLeftColumn() {
             render();
           });
           document.querySelector("#v1-r").addEventListener("input", () => {
-            instanceRef.vertex1_color[0] = parseInt(
+            instanceRef.vertex1_color[0] = parseFloat(
               document.querySelector("#v1-r").value
             );
             render();
           });
           document.querySelector("#v1-g").addEventListener("input", () => {
-            instanceRef.vertex1_color[1] = parseInt(
+            instanceRef.vertex1_color[1] = parseFloat(
               document.querySelector("#v1-g").value
             );
             render();
           });
           document.querySelector("#v1-b").addEventListener("input", () => {
-            instanceRef.vertex1_color[2] = parseInt(
+            instanceRef.vertex1_color[2] = parseFloat(
               document.querySelector("#v1-b").value
             );
             render();
           });
           document.querySelector("#v1-a").addEventListener("input", () => {
-            instanceRef.vertex1_color[3] = parseInt(
+            instanceRef.vertex1_color[3] = parseFloat(
               document.querySelector("#v1-a").value
             );
             render();
@@ -826,25 +827,25 @@ function refreshLeftColumn() {
             render();
           });
           document.querySelector("#v2-r").addEventListener("input", () => {
-            instanceRef.vertex2_color[0] = parseInt(
+            instanceRef.vertex2_color[0] = parseFloat(
               document.querySelector("#v2-r").value
             );
             render();
           });
           document.querySelector("#v2-g").addEventListener("input", () => {
-            instanceRef.vertex2_color[1] = parseInt(
+            instanceRef.vertex2_color[1] = parseFloat(
               document.querySelector("#v2-g").value
             );
             render();
           });
           document.querySelector("#v2-b").addEventListener("input", () => {
-            instanceRef.vertex2_color[2] = parseInt(
+            instanceRef.vertex2_color[2] = parseFloat(
               document.querySelector("#v2-b").value
             );
             render();
           });
           document.querySelector("#v2-a").addEventListener("input", () => {
-            instanceRef.vertex2_color[3] = parseInt(
+            instanceRef.vertex2_color[3] = parseFloat(
               document.querySelector("#v2-a").value
             );
             render();
@@ -905,19 +906,19 @@ function refreshLeftColumn() {
             <h4>Color values (0 - 1)</h4>
             <div>
               R:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertexColors[i][0]
               }" id="v${id}-r">
               G:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertexColors[i][1]
               }" id="v${id}-g">
               B:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertexColors[i][2]
               }" id="v${id}-b">
               A:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertexColors[i][3]
               }" id="v${id}-a">
             </div>
@@ -972,7 +973,7 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-r`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][0] = parseInt(
+                instanceRef.vertexColors[i][0] = parseFloat(
                   document.querySelector(`#v${id}-r`).value
                 );
                 render();
@@ -980,7 +981,7 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-g`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][1] = parseInt(
+                instanceRef.vertexColors[i][1] = parseFloat(
                   document.querySelector(`#v${id}-g`).value
                 );
                 render();
@@ -988,7 +989,7 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-b`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][2] = parseInt(
+                instanceRef.vertexColors[i][2] = parseFloat(
                   document.querySelector(`#v${id}-b`).value
                 );
                 render();
@@ -996,14 +997,14 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-a`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][3] = parseInt(
+                instanceRef.vertexColors[i][3] = parseFloat(
                   document.querySelector(`#v${id}-a`).value
                 );
                 render();
               });
           });
         } else if (instance.type === "RECTANGLE") {
-          /* Semua fungsionalitas LINE! */
+          /* Semua fungsionalitas RECTANGLE! */
           rightColumn.innerHTML = `
           <h1 id="right-title">Editing instance ${idx + 1} (${
             instance.type
@@ -1059,19 +1060,19 @@ function refreshLeftColumn() {
             <h4>Color values (0 - 1)</h4>
             <div>
               R:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertexColors[i][0]
               }" id="v${id}-r">
               G:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertexColors[i][1]
               }" id="v${id}-g">
               B:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertexColors[i][2]
               }" id="v${id}-b">
               A:
-              <input type="number" min="0" max="1" value="${
+              <input type="number" min="0" max="1" step="0.1" value="${
                 instanceRef.vertexColors[i][3]
               }" id="v${id}-a">
             </div>
@@ -1126,7 +1127,7 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-r`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][0] = parseInt(
+                instanceRef.vertexColors[i][0] = parseFloat(
                   document.querySelector(`#v${id}-r`).value
                 );
                 render();
@@ -1134,7 +1135,7 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-g`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][1] = parseInt(
+                instanceRef.vertexColors[i][1] = parseFloat(
                   document.querySelector(`#v${id}-g`).value
                 );
                 render();
@@ -1142,7 +1143,7 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-b`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][2] = parseInt(
+                instanceRef.vertexColors[i][2] = parseFloat(
                   document.querySelector(`#v${id}-b`).value
                 );
                 render();
@@ -1150,7 +1151,161 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-a`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][3] = parseInt(
+                instanceRef.vertexColors[i][3] = parseFloat(
+                  document.querySelector(`#v${id}-a`).value
+                );
+                render();
+              });
+          });
+        } else if (instance.type === "POLYGON") {
+          /* Semua fungsionalitas POLYGON! */
+          rightColumn.innerHTML = `
+          <h1 id="right-title">Editing instance ${idx + 1} (${
+            instance.type
+          })...</h1>
+          <div>
+            <h3>Translation</h3>
+            <div>
+              X:
+              <input type="range" min="-${
+                canvas.getBoundingClientRect().width
+              }" max="${canvas.getBoundingClientRect().width}" value="${
+            instanceRef.translation[0]
+          }" step="1" id="x-translate">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="-${
+                canvas.getBoundingClientRect().height
+              }" max="${canvas.getBoundingClientRect().height}" value="${
+            instanceRef.translation[1]
+          }" step="1" id="y-translate">
+            </div>
+            <h3>Rotation</h3>
+            <div>
+              Angle:
+              <input type="range" min="0" max="360" value="${
+                instanceRef.rotation
+              }" step="1" id="rotate">
+            </div>
+          `;
+
+          /* Tambahkan fungsionalitas vertex */
+          instanceRef.vertexes.forEach((_, i) => {
+            const id = i + 1; // Mempermudah pengerjaan
+            rightColumn.innerHTML += `
+            <h3>Vertex ${id}</h3>
+            <div>
+              X:
+              <input type="range" min="${
+                canvas.getBoundingClientRect().left
+              }" max="${canvas.getBoundingClientRect().right}" value="${
+              instanceRef.vertexes[i][0]
+            }" step="1" id="v${id}-x">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="${
+                canvas.getBoundingClientRect().top
+              }" max="${canvas.getBoundingClientRect().bottom}" value="${
+              instanceRef.vertexes[i][1]
+            }" step="1" id="v${id}-y">
+            </div>
+            <h4>Color values (0 - 1)</h4>
+            <div>
+              R:
+              <input type="number" min="0" max="1" step="0.1" value="${
+                instanceRef.vertexColors[i][0]
+              }" id="v${id}-r">
+              G:
+              <input type="number" min="0" max="1" step="0.1" value="${
+                instanceRef.vertexColors[i][1]
+              }" id="v${id}-g">
+              B:
+              <input type="number" min="0" max="1" step="0.1" value="${
+                instanceRef.vertexColors[i][2]
+              }" id="v${id}-b">
+              A:
+              <input type="number" min="0" max="1" step="0.1" value="${
+                instanceRef.vertexColors[i][3]
+              }" id="v${id}-a">
+            </div>
+            `;
+          });
+
+          /* Event listener untuk translation (harusnya untuk semua model sama) */
+          document
+            .querySelector("#x-translate")
+            .addEventListener("input", () => {
+              instanceRef.translation[0] = parseInt(
+                document.querySelector("#x-translate").value
+              );
+              render();
+            });
+          document
+            .querySelector("#y-translate")
+            .addEventListener("input", () => {
+              instanceRef.translation[1] = parseInt(
+                document.querySelector("#y-translate").value
+              );
+              render();
+            });
+
+          /* Event listener untuk rotation (harusnya untuk semua model sama) */
+          document.querySelector("#rotate").addEventListener("input", () => {
+            instanceRef.rotation = parseInt(
+              document.querySelector("#rotate").value
+            );
+            render();
+          });
+
+          /* Event listener untuk fungsionalitas vertex */
+          instanceRef.vertexes.forEach((_, i) => {
+            const id = i + 1; // Mempermudah pengerjaan
+            document
+              .querySelector(`#v${id}-x`)
+              .addEventListener("input", () => {
+                instanceRef.vertexes[i][0] = parseInt(
+                  document.querySelector(`#v${id}-x`).value
+                );
+                render();
+              });
+            document
+              .querySelector(`#v${id}-y`)
+              .addEventListener("input", () => {
+                instanceRef.vertexes[i][1] = parseInt(
+                  document.querySelector(`#v${id}-y`).value
+                );
+                render();
+              });
+            document
+              .querySelector(`#v${id}-r`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][0] = parseFloat(
+                  document.querySelector(`#v${id}-r`).value
+                );
+                render();
+              });
+            document
+              .querySelector(`#v${id}-g`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][1] = parseFloat(
+                  document.querySelector(`#v${id}-g`).value
+                );
+                render();
+              });
+            document
+              .querySelector(`#v${id}-b`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][2] = parseFloat(
+                  document.querySelector(`#v${id}-b`).value
+                );
+                render();
+              });
+            document
+              .querySelector(`#v${id}-a`)
+              .addEventListener("input", () => {
+                instanceRef.vertexColors[i][3] = parseFloat(
                   document.querySelector(`#v${id}-a`).value
                 );
                 render();
