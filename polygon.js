@@ -8,6 +8,17 @@ class Polygon {
     this.rotation = 0;
   }
 
+  getPolygonData() {
+    let polygonData = [];
+    this.vertexes.forEach((_, i) => {
+      polygonData.push({
+        vertex: this.vertexes[i],
+        color: this.vertexColors[i],
+      });
+    })
+    return polygonData;
+  }
+
   deleteVertexAtIndex(idx) {
     let newVertexes = [];
     let newVertexColors = [];
@@ -73,16 +84,22 @@ class Polygon {
   }
 
   toConvexHull() {
-    this.vertexes = this.convexHull();
-    this.vertexColors = this.vertexes.map((_) => {
-      return [0, 0, 0, 1];
-    });
+    let newVertexes = []
+    let newVertexColors = []
+    this.convexHull().forEach(data => {
+      newVertexes.push(data.vertex);
+      newVertexColors.push(data.color);
+    })
+    this.vertexes = newVertexes;
+    this.vertexColors = newVertexColors;
   }
 
   convexHull() {
-    var points = [...this.vertexes];
+    var points = this.getPolygonData();
     points.sort(function (a, b) {
-      return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+      return a.vertex[0] != b.vertex[0]
+        ? a.vertex[0] - b.vertex[0]
+        : a.vertex[1] - b.vertex[1];
     });
 
     var n = points.length;
@@ -104,14 +121,16 @@ class Polygon {
 
     hull.pop();
 
-    console.log(hull, points);
-
     return hull;
   }
 
   removeMiddle(a, b, c) {
-    var cross = (a[0] - b[0]) * (c[1] - b[1]) - (a[1] - b[1]) * (c[0] - b[0]);
-    var dot = (a[0] - b[0]) * (c[0] - b[0]) + (a[1] - b[1]) * (c[1] - b[1]);
+    var cross =
+      (a.vertex[0] - b.vertex[0]) * (c.vertex[1] - b.vertex[1]) -
+      (a.vertex[1] - b.vertex[1]) * (c.vertex[0] - b.vertex[0]);
+    var dot =
+      (a.vertex[0] - b.vertex[0]) * (c.vertex[0] - b.vertex[0]) +
+      (a.vertex[1] - b.vertex[1]) * (c.vertex[1] - b.vertex[1]);
     return cross < 0 || (cross == 0 && dot <= 0);
   }
 }

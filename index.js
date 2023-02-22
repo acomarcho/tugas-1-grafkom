@@ -1318,9 +1318,6 @@ function refreshLeftColumn() {
           document
             .querySelector("#convex-hull")
             .addEventListener("click", () => {
-              window.alert(
-                "NOTICE: Polygon color will be reset due to rearrangements"
-              );
               instanceRef.toConvexHull();
               render();
               clickMyself();
