@@ -858,6 +858,15 @@ function refreshLeftColumn() {
             instance.type
           })...</h1>
             <div>
+              <h3>Length</h3>
+              <div>
+                Length:
+                <input type="range" min="0" max="${
+                  canvas.getBoundingClientRect().width
+                }" value="${instanceRef.size}" id="length-slider" />
+              </div>
+            </div>
+            <div>
               <h3>Translation</h3>
               <div>
                 X:
@@ -926,6 +935,17 @@ function refreshLeftColumn() {
             </div>
             `;
           });
+
+          /* Special model functions */
+          document
+            .querySelector("#length-slider")
+            .addEventListener("input", () => {
+              instanceRef.size = parseInt(
+                document.querySelector("#length-slider").value
+              );
+              instanceRef.updateVertexes();
+              render();
+            });
 
           /* Event listener untuk translation (harusnya untuk semua model sama) */
           document
@@ -1015,11 +1035,15 @@ function refreshLeftColumn() {
             <h3>Length & width</h3>
             <div>
               Length:
-              <input type="range" min="0" max="${canvas.getBoundingClientRect().width}" value="${instanceRef.length}" id="length-slider" />
+              <input type="range" min="0" max="${
+                canvas.getBoundingClientRect().width
+              }" value="${instanceRef.length}" id="length-slider" />
             </div>
             <div>
               Width:
-              <input type="range" min="0" max="${canvas.getBoundingClientRect().height}" value="${instanceRef.width}" id="width-slider" />
+              <input type="range" min="0" max="${
+                canvas.getBoundingClientRect().height
+              }" value="${instanceRef.width}" id="width-slider" />
             </div>
           </div>
           <div>
@@ -1111,20 +1135,24 @@ function refreshLeftColumn() {
             });
 
           /* Special model functions */
-          document.querySelector("#length-slider").addEventListener("input", () => {
-            instanceRef.length = parseInt(
-              document.querySelector("#length-slider").value
-            );
-            instanceRef.updateVertexes();
-            render();
-          });
-          document.querySelector("#width-slider").addEventListener("input", () => {
-            instanceRef.width = parseInt(
-              document.querySelector("#width-slider").value
-            );
-            instanceRef.updateVertexes();
-            render();
-          });
+          document
+            .querySelector("#length-slider")
+            .addEventListener("input", () => {
+              instanceRef.length = parseInt(
+                document.querySelector("#length-slider").value
+              );
+              instanceRef.updateVertexes();
+              render();
+            });
+          document
+            .querySelector("#width-slider")
+            .addEventListener("input", () => {
+              instanceRef.width = parseInt(
+                document.querySelector("#width-slider").value
+              );
+              instanceRef.updateVertexes();
+              render();
+            });
 
           /* Event listener untuk rotation (harusnya untuk semua model sama) */
           document.querySelector("#rotate").addEventListener("input", () => {
@@ -1189,7 +1217,7 @@ function refreshLeftColumn() {
         } else if (instance.type === "POLYGON") {
           const clickMyself = () => {
             document.querySelector(`#btn-edit-model-${idx + 1}`).click();
-          }
+          };
 
           /* Semua fungsionalitas POLYGON! */
           rightColumn.innerHTML = `
@@ -1273,11 +1301,15 @@ function refreshLeftColumn() {
           });
 
           /* Event listener untuk add vertex */
-          document.querySelector("#add-vertex").addEventListener("click", () => {
-            window.alert("Untuk menambah vertex, silakan klik suatu titik pada canvas.");
-            currentAction = "ADD_VERTEX";
-            targetPolygon = idx;
-          })
+          document
+            .querySelector("#add-vertex")
+            .addEventListener("click", () => {
+              window.alert(
+                "Untuk menambah vertex, silakan klik suatu titik pada canvas."
+              );
+              currentAction = "ADD_VERTEX";
+              targetPolygon = idx;
+            });
 
           /* Event listener untuk translation (harusnya untuk semua model sama) */
           document
