@@ -72,7 +72,6 @@ class Rectangle {
   getRotationComponents() {
     var angleInDegrees = 360 - this.rotation;
     var angleInRadians = angleInDegrees * Math.PI / 180;
-    console.log([Math.sin(angleInRadians), Math.cos(angleInRadians)]);
     return [Math.sin(angleInRadians), Math.cos(angleInRadians)];
   }
 }

@@ -10,11 +10,6 @@ class Line {
   }
 
   findCentroid() {
-    console.log(this.vertex1, this.vertex2);
-    console.log([
-      (this.vertex1[0] + this.vertex2[0]) / 2,
-      (this.vertex1[1] + this.vertex2[1]) / 2
-    ]);
     return [
       (this.vertex1[0] + this.vertex2[0]) / 2,
       (this.vertex1[1] + this.vertex2[1]) / 2

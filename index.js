@@ -497,6 +497,7 @@ function render() {
       gl.drawArrays(gl.TRIANGLE_FAN, 0, plgnRef.vertexes.length);
     }
   });
+  refreshLeftColumn();
 }
 
 /* ============= */
@@ -1158,6 +1159,10 @@ function refreshLeftColumn() {
               });
           });
         } else if (instance.type === "POLYGON") {
+          const clickMyself = () => {
+            document.querySelector(`#btn-edit-model-${idx + 1}`).click();
+          }
+
           /* Semua fungsionalitas POLYGON! */
           rightColumn.innerHTML = `
           <h1 id="right-title">Editing instance ${idx + 1} (${
@@ -1195,6 +1200,9 @@ function refreshLeftColumn() {
             const id = i + 1; // Mempermudah pengerjaan
             rightColumn.innerHTML += `
             <h3>Vertex ${id}</h3>
+            <div>
+              <button id="v${id}-delete">Delete</button>
+            </div>
             <div>
               X:
               <input type="range" min="${
@@ -1262,6 +1270,19 @@ function refreshLeftColumn() {
           /* Event listener untuk fungsionalitas vertex */
           instanceRef.vertexes.forEach((_, i) => {
             const id = i + 1; // Mempermudah pengerjaan
+            document
+              .querySelector(`#v${id}-delete`)
+              .addEventListener("click", () => {
+                if (instanceRef.vertexes.length <= 3) {
+                  window.alert(
+                    "Cannot delete vertex. N of polygon must be >= 3!"
+                  );
+                } else {
+                  instanceRef.deleteVertexAtIndex(i);
+                  render();
+                  clickMyself();
+                }
+              });
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
@@ -1438,7 +1459,6 @@ canvas.addEventListener("click", (e) => {
   }
 
   if (currentAction === "POLYGON") {
-    console.log(vertexes, polygonN);
     vertexes.push([e.clientX, e.clientY]);
 
     if (vertexes.length >= polygonN) {

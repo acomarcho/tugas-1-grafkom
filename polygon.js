@@ -8,6 +8,23 @@ class Polygon {
     this.rotation = 0;
   }
 
+  deleteVertexAtIndex(idx) {
+    let newVertexes = [];
+    let newVertexColors = [];
+    this.vertexes.forEach((vertex, i) => {
+      if (i !== idx) {
+        newVertexes.push(vertex);
+      }
+    });
+    this.vertexColors.forEach((color, i) => {
+      if (i !== idx) {
+        newVertexColors.push(color);
+      }
+    });
+    this.vertexes = newVertexes;
+    this.vertexColors = newVertexColors;
+  }
+
   findCentroid() {
     let xSum = 0;
     let ySum = 0;
@@ -47,7 +64,6 @@ class Polygon {
   getRotationComponents() {
     var angleInDegrees = 360 - this.rotation;
     var angleInRadians = (angleInDegrees * Math.PI) / 180;
-    console.log([Math.sin(angleInRadians), Math.cos(angleInRadians)]);
     return [Math.sin(angleInRadians), Math.cos(angleInRadians)];
   }
 }
