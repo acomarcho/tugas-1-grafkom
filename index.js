@@ -34,14 +34,21 @@ lineBuffer = gl.createBuffer();
 lineColorBuffer = gl.createBuffer();
 
 /* 2. Untuk persegi */
-squareVertexShader = createShader(gl, gl.VERTEX_SHADER, squareVertexShaderScript);
+squareVertexShader = createShader(
+  gl,
+  gl.VERTEX_SHADER,
+  squareVertexShaderScript
+);
 squareFragmentShader = createShader(
   gl,
   gl.FRAGMENT_SHADER,
   squareFragmentShaderScript
 );
 squareProgram = createProgram(gl, squareVertexShader, squareFragmentShader);
-squarePositionAttributeLocation = gl.getAttribLocation(squareProgram, "a_position");
+squarePositionAttributeLocation = gl.getAttribLocation(
+  squareProgram,
+  "a_position"
+);
 squareColorAttributeLocation = gl.getAttribLocation(squareProgram, "a_color");
 squareResolutionUniformLocation = gl.getUniformLocation(
   squareProgram,
@@ -52,7 +59,10 @@ squareTranslationUniformLocation = gl.getUniformLocation(
   squareProgram,
   "u_translation"
 );
-squareRotationUniformLocation = gl.getUniformLocation(squareProgram, "u_rotation");
+squareRotationUniformLocation = gl.getUniformLocation(
+  squareProgram,
+  "u_rotation"
+);
 squareRotationOriginUniformLocation = gl.getUniformLocation(
   squareProgram,
   "u_rotation_origin"
@@ -226,12 +236,8 @@ function render() {
       );
 
       /* Set rotation origin */
-      const origin = lineRef.findCentroid()
-      gl.uniform2f(
-        lineRotationOriginUniformLocation,
-        origin[0],
-        origin[1]
-      );
+      const origin = lineRef.findCentroid();
+      gl.uniform2f(lineRotationOriginUniformLocation, origin[0], origin[1]);
 
       /* Gambar! */
       gl.drawArrays(gl.LINES, 0, 2);
@@ -241,10 +247,10 @@ function render() {
       /* Gambar persegi! */
       gl.useProgram(squareProgram);
       const squareRef = instance.ref;
-    
+
       /* gl.ARRAY_BUFFER = squareBuffer */
       gl.bindBuffer(gl.ARRAY_BUFFER, squareBuffer);
-    
+
       /* Masukkan data posisi */
       var positions = squareRef.getFlattenedVertexes();
       gl.bufferData(
@@ -252,10 +258,10 @@ function render() {
         new Float32Array(positions),
         gl.STATIC_DRAW
       );
-    
+
       /* Enable attribute */
       gl.enableVertexAttribArray(squarePositionAttributeLocation);
-    
+
       /* Masukkan data ke attribute */
       gl.vertexAttribPointer(
         squarePositionAttributeLocation,
@@ -265,17 +271,17 @@ function render() {
         0,
         0
       );
-    
+
       /* gl.ARRAY_BUFFER = squareColorBuffer */
       gl.bindBuffer(gl.ARRAY_BUFFER, squareColorBuffer);
-    
+
       /* Masukkan data warna */
       var colors = squareRef.getFlattenedColors();
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-    
+
       /* Enable attribute */
       gl.enableVertexAttribArray(squareColorAttributeLocation);
-    
+
       /* Masukkan data ke attribute */
       gl.vertexAttribPointer(
         squareColorAttributeLocation,
@@ -285,28 +291,28 @@ function render() {
         0,
         0
       );
-    
+
       /* Set resolusi */
       gl.uniform2f(
         squareResolutionUniformLocation,
         gl.canvas.width,
         gl.canvas.height
       );
-    
+
       /* Set offset */
       gl.uniform2f(
         squareOffsetUniformLocation,
         canvas.getBoundingClientRect().left,
         canvas.getBoundingClientRect().top
       );
-    
+
       /* Set translation */
       gl.uniform2f(
         squareTranslationUniformLocation,
         squareRef.translation[0],
         squareRef.translation[1]
       );
-    
+
       /* Set rotation */
       gl.uniform2f(
         squareRotationUniformLocation,
@@ -314,13 +320,9 @@ function render() {
         squareRef.getRotationComponents()[1]
       );
       /* Set rotation origin */
-      const origin = squareRef.findCentroid()
-      gl.uniform2f(
-        squareRotationOriginUniformLocation,
-        origin[0],
-        origin[1]
-      );
-    
+      const origin = squareRef.findCentroid();
+      gl.uniform2f(squareRotationOriginUniformLocation, origin[0], origin[1]);
+
       /* Gambar! */
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
@@ -403,12 +405,8 @@ function render() {
       );
 
       /* Set rotation origin */
-      const origin = rectRef.findCentroid()
-      gl.uniform2f(
-        rectRotationOriginUniformLocation,
-        origin[0],
-        origin[1]
-      );
+      const origin = rectRef.findCentroid();
+      gl.uniform2f(rectRotationOriginUniformLocation, origin[0], origin[1]);
 
       /* Gambar! */
       gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -473,8 +471,8 @@ function render() {
       /* Set offset */
       gl.uniform2f(
         plgnOffsetUniformLocation,
-        canvas.getBoundingClientplgn().left,
-        canvas.getBoundingClientplgn().top
+        canvas.getBoundingClientRect().left,
+        canvas.getBoundingClientRect().top
       );
 
       /* Set translation */
@@ -492,12 +490,8 @@ function render() {
       );
 
       /* Set rotation origin */
-      const origin = plgnRef.findCentroid()
-      gl.uniform2f(
-        plgnRotationOriginUniformLocation,
-        origin[0],
-        origin[1]
-      );
+      const origin = plgnRef.findCentroid();
+      gl.uniform2f(plgnRotationOriginUniformLocation, origin[0], origin[1]);
 
       /* Gambar! */
       gl.drawArrays(gl.TRIANGLE_FAN, 0, plgnRef.vertexes.length);
@@ -513,6 +507,7 @@ function render() {
 /* Valid values: NONE, LINE, SQUARE, RECTANGLE, POLYGON */
 let currentAction = "NONE";
 let clickCount = 0;
+let polygonN = 0;
 let vertexes = [];
 
 /* Click listener untuk button create <xxx> */
@@ -521,6 +516,7 @@ function initiateCreateClickListeners() {
   document.querySelector("#btn-create-line").addEventListener("click", () => {
     currentAction = "LINE";
     clickCount = 0;
+    polygonN = 0;
     vertexes = [];
 
     alert(`Untuk membuat sebuah garis:
@@ -531,19 +527,18 @@ function initiateCreateClickListeners() {
   });
 
   /* Membuat persegi */
-/* Membuat persegi */
-document.querySelector("#btn-create-square").addEventListener("click", () => {
-  currentAction = "SQUARE";
-  clickCount = 0;
-  vertexes = [];
+  document.querySelector("#btn-create-square").addEventListener("click", () => {
+    currentAction = "SQUARE";
+    clickCount = 0;
+    polygonN = 0;
+    vertexes = [];
 
-  alert(`Untuk membuat sebuah persegi:
+    alert(`Untuk membuat sebuah persegi:
   1. Klik suatu posisi pada kanvas untuk menandai titik kiri atas persegi
   2. Isi prompt besar sisi (1 - ${canvas.getBoundingClientRect().width})`);
 
-  document.querySelector("#right-title").textContent = "Creating a square...";
-});
-
+    document.querySelector("#right-title").textContent = "Creating a square...";
+  });
 
   /* Membuat persegi panjang */
   document
@@ -551,6 +546,7 @@ document.querySelector("#btn-create-square").addEventListener("click", () => {
     .addEventListener("click", () => {
       currentAction = "RECTANGLE";
       clickCount = 0;
+      polygonN = 0;
       vertexes = [];
 
       alert(`Untuk membuat sebuah persegi panjang:
@@ -558,10 +554,38 @@ document.querySelector("#btn-create-square").addEventListener("click", () => {
     2. Isi prompt panjang (1 - ${canvas.getBoundingClientRect().width})
     3. Isi prompt lebar (1 - ${canvas.getBoundingClientRect().height})`);
 
-      document.querySelector("#right-title").textContent = "Creating a rectangle...";
+      document.querySelector("#right-title").textContent =
+        "Creating a rectangle...";
     });
 
   /* Membuat poligon */
+  /* Membuat persegi panjang */
+  document
+    .querySelector("#btn-create-polygon")
+    .addEventListener("click", () => {
+      currentAction = "POLYGON";
+      clickCount = 0;
+      polygonN = 0;
+      vertexes = [];
+
+      alert(`Untuk membuat poligon:
+    1. Isi berapa banyak titik sudut poligon (>= 3)
+    2. Klik pada layar sebanyak titik sudut yang diinginkan`);
+
+      while (!polygonN) {
+        let N = prompt(`Enter number of vertexes: (>= 3)`);
+        if (isNaN(N)) {
+          continue;
+        }
+        if (N < 3) {
+          continue;
+        }
+        polygonN = parseInt(N);
+      }
+
+      document.querySelector("#right-title").textContent =
+        `Creating a polygon of N = ${polygonN}...`;;
+    });
 }
 initiateCreateClickListeners();
 
@@ -728,88 +752,108 @@ function refreshLeftColumn() {
           document
             .querySelector("#x-translate")
             .addEventListener("input", () => {
-              instanceRef.translation[0] =
-                parseInt(document.querySelector("#x-translate").value);
+              instanceRef.translation[0] = parseInt(
+                document.querySelector("#x-translate").value
+              );
               render();
             });
           document
             .querySelector("#y-translate")
             .addEventListener("input", () => {
-              instanceRef.translation[1] =
-                parseInt(document.querySelector("#y-translate").value);
+              instanceRef.translation[1] = parseInt(
+                document.querySelector("#y-translate").value
+              );
               render();
             });
 
           /* Event listener untuk rotation (harusnya untuk semua model sama) */
           document.querySelector("#rotate").addEventListener("input", () => {
-            instanceRef.rotation = parseInt(document.querySelector("#rotate").value);
+            instanceRef.rotation = parseInt(
+              document.querySelector("#rotate").value
+            );
             render();
           });
 
           /* Event listener untuk vertex 1 */
           document.querySelector("#v1-x").addEventListener("input", () => {
-            instanceRef.vertex1[0] = parseInt(document.querySelector("#v1-x").value);
+            instanceRef.vertex1[0] = parseInt(
+              document.querySelector("#v1-x").value
+            );
             render();
           });
           document.querySelector("#v1-y").addEventListener("input", () => {
-            instanceRef.vertex1[1] = parseInt(document.querySelector("#v1-y").value);
+            instanceRef.vertex1[1] = parseInt(
+              document.querySelector("#v1-y").value
+            );
             render();
           });
           document.querySelector("#v1-r").addEventListener("input", () => {
-            instanceRef.vertex1_color[0] =
-              parseInt(document.querySelector("#v1-r").value);
+            instanceRef.vertex1_color[0] = parseInt(
+              document.querySelector("#v1-r").value
+            );
             render();
           });
           document.querySelector("#v1-g").addEventListener("input", () => {
-            instanceRef.vertex1_color[1] =
-              parseInt(document.querySelector("#v1-g").value);
+            instanceRef.vertex1_color[1] = parseInt(
+              document.querySelector("#v1-g").value
+            );
             render();
           });
           document.querySelector("#v1-b").addEventListener("input", () => {
-            instanceRef.vertex1_color[2] =
-              parseInt(document.querySelector("#v1-b").value);
+            instanceRef.vertex1_color[2] = parseInt(
+              document.querySelector("#v1-b").value
+            );
             render();
           });
           document.querySelector("#v1-a").addEventListener("input", () => {
-            instanceRef.vertex1_color[3] =
-              parseInt(document.querySelector("#v1-a").value);
+            instanceRef.vertex1_color[3] = parseInt(
+              document.querySelector("#v1-a").value
+            );
             render();
           });
 
           /* Event listener untuk vertex 2 */
           document.querySelector("#v2-x").addEventListener("input", () => {
-            instanceRef.vertex2[0] = parseInt(document.querySelector("#v2-x").value);
+            instanceRef.vertex2[0] = parseInt(
+              document.querySelector("#v2-x").value
+            );
             render();
           });
           document.querySelector("#v2-y").addEventListener("input", () => {
-            instanceRef.vertex2[1] = parseInt(document.querySelector("#v2-y").value);
+            instanceRef.vertex2[1] = parseInt(
+              document.querySelector("#v2-y").value
+            );
             render();
           });
           document.querySelector("#v2-r").addEventListener("input", () => {
-            instanceRef.vertex2_color[0] =
-              parseInt(document.querySelector("#v2-r").value);
+            instanceRef.vertex2_color[0] = parseInt(
+              document.querySelector("#v2-r").value
+            );
             render();
           });
           document.querySelector("#v2-g").addEventListener("input", () => {
-            instanceRef.vertex2_color[1] =
-              parseInt(document.querySelector("#v2-g").value);
+            instanceRef.vertex2_color[1] = parseInt(
+              document.querySelector("#v2-g").value
+            );
             render();
           });
           document.querySelector("#v2-b").addEventListener("input", () => {
-            instanceRef.vertex2_color[2] =
-              parseInt(document.querySelector("#v2-b").value);
+            instanceRef.vertex2_color[2] = parseInt(
+              document.querySelector("#v2-b").value
+            );
             render();
           });
           document.querySelector("#v2-a").addEventListener("input", () => {
-            instanceRef.vertex2_color[3] =
-              parseInt(document.querySelector("#v2-a").value);
+            instanceRef.vertex2_color[3] = parseInt(
+              document.querySelector("#v2-a").value
+            );
             render();
           });
         } else if (instance.type === "SQUARE") {
           rightColumn.innerHTML = `
             <h1 id="right-title">Editing instance ${idx + 1} (${
-              instance.type
-            })...</h1>
+            instance.type
+          })...</h1>
             <div>
               <h3>Translation</h3>
               <div>
@@ -817,16 +861,16 @@ function refreshLeftColumn() {
                 <input type="range" min="-${
                   canvas.getBoundingClientRect().width
                 }" max="${canvas.getBoundingClientRect().width}" value="${
-                  instanceRef.translation[0]
-                }" step="1" id="x-translate">
+            instanceRef.translation[0]
+          }" step="1" id="x-translate">
               </div>
               <div>
                 Y:
                 <input type="range" min="-${
                   canvas.getBoundingClientRect().height
                 }" max="${canvas.getBoundingClientRect().height}" value="${
-                  instanceRef.translation[1]
-                }" step="1" id="y-translate">
+            instanceRef.translation[1]
+          }" step="1" id="y-translate">
               </div>
               <h3>Rotation</h3>
               <div>
@@ -836,7 +880,7 @@ function refreshLeftColumn() {
                 }" step="1" id="rotate">
               </div>
             `;
-        
+
           /* Tambahkan fungsionalitas vertex */
           instanceRef.vertexes.forEach((_, i) => {
             const id = i + 1; // Mempermudah pengerjaan
@@ -884,21 +928,25 @@ function refreshLeftColumn() {
           document
             .querySelector("#x-translate")
             .addEventListener("input", () => {
-              instanceRef.translation[0] =
-                parseInt(document.querySelector("#x-translate").value);
+              instanceRef.translation[0] = parseInt(
+                document.querySelector("#x-translate").value
+              );
               render();
             });
           document
             .querySelector("#y-translate")
             .addEventListener("input", () => {
-              instanceRef.translation[1] =
-                parseInt(document.querySelector("#y-translate").value);
+              instanceRef.translation[1] = parseInt(
+                document.querySelector("#y-translate").value
+              );
               render();
             });
 
           /* Event listener untuk rotation (harusnya untuk semua model sama) */
           document.querySelector("#rotate").addEventListener("input", () => {
-            instanceRef.rotation = parseInt(document.querySelector("#rotate").value);
+            instanceRef.rotation = parseInt(
+              document.querySelector("#rotate").value
+            );
             render();
           });
 
@@ -908,49 +956,49 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
-                instanceRef.vertexes[i][0] = parseInt(document.querySelector(
-                  `#v${id}-x`
-                ).value);
+                instanceRef.vertexes[i][0] = parseInt(
+                  document.querySelector(`#v${id}-x`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
-                instanceRef.vertexes[i][1] = parseInt(document.querySelector(
-                  `#v${id}-y`
-                ).value);
+                instanceRef.vertexes[i][1] = parseInt(
+                  document.querySelector(`#v${id}-y`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-r`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][0] = parseInt(document.querySelector(
-                  `#v${id}-r`
-                ).value);
+                instanceRef.vertexColors[i][0] = parseInt(
+                  document.querySelector(`#v${id}-r`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-g`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][1] = parseInt(document.querySelector(
-                  `#v${id}-g`
-                ).value);
+                instanceRef.vertexColors[i][1] = parseInt(
+                  document.querySelector(`#v${id}-g`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-b`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][2] = parseInt(document.querySelector(
-                  `#v${id}-b`
-                ).value);
+                instanceRef.vertexColors[i][2] = parseInt(
+                  document.querySelector(`#v${id}-b`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-a`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][3] = parseInt(document.querySelector(
-                  `#v${id}-a`
-                ).value);
+                instanceRef.vertexColors[i][3] = parseInt(
+                  document.querySelector(`#v${id}-a`).value
+                );
                 render();
               });
           });
@@ -1034,21 +1082,25 @@ function refreshLeftColumn() {
           document
             .querySelector("#x-translate")
             .addEventListener("input", () => {
-              instanceRef.translation[0] =
-                parseInt(document.querySelector("#x-translate").value);
+              instanceRef.translation[0] = parseInt(
+                document.querySelector("#x-translate").value
+              );
               render();
             });
           document
             .querySelector("#y-translate")
             .addEventListener("input", () => {
-              instanceRef.translation[1] =
-                parseInt(document.querySelector("#y-translate").value);
+              instanceRef.translation[1] = parseInt(
+                document.querySelector("#y-translate").value
+              );
               render();
             });
 
           /* Event listener untuk rotation (harusnya untuk semua model sama) */
           document.querySelector("#rotate").addEventListener("input", () => {
-            instanceRef.rotation = parseInt(document.querySelector("#rotate").value);
+            instanceRef.rotation = parseInt(
+              document.querySelector("#rotate").value
+            );
             render();
           });
 
@@ -1058,49 +1110,49 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
-                instanceRef.vertexes[i][0] = parseInt(document.querySelector(
-                  `#v${id}-x`
-                ).value);
+                instanceRef.vertexes[i][0] = parseInt(
+                  document.querySelector(`#v${id}-x`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
-                instanceRef.vertexes[i][1] = parseInt(document.querySelector(
-                  `#v${id}-y`
-                ).value);
+                instanceRef.vertexes[i][1] = parseInt(
+                  document.querySelector(`#v${id}-y`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-r`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][0] = parseInt(document.querySelector(
-                  `#v${id}-r`
-                ).value);
+                instanceRef.vertexColors[i][0] = parseInt(
+                  document.querySelector(`#v${id}-r`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-g`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][1] = parseInt(document.querySelector(
-                  `#v${id}-g`
-                ).value);
+                instanceRef.vertexColors[i][1] = parseInt(
+                  document.querySelector(`#v${id}-g`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-b`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][2] = parseInt(document.querySelector(
-                  `#v${id}-b`
-                ).value);
+                instanceRef.vertexColors[i][2] = parseInt(
+                  document.querySelector(`#v${id}-b`).value
+                );
                 render();
               });
             document
               .querySelector(`#v${id}-a`)
               .addEventListener("input", () => {
-                instanceRef.vertexColors[i][3] = parseInt(document.querySelector(
-                  `#v${id}-a`
-                ).value);
+                instanceRef.vertexColors[i][3] = parseInt(
+                  document.querySelector(`#v${id}-a`).value
+                );
                 render();
               });
           });
@@ -1133,13 +1185,14 @@ canvas.addEventListener("click", (e) => {
   }
 
   if (currentAction === "SQUARE") {
-
     vertexes.push([e.clientX, e.clientY]);
     let validLength = 0;
-  
+
     while (!validLength) {
       let length = prompt(
-        `Enter size of square: (1-${canvas.getBoundingClientRect().width}), 0 to cancel`
+        `Enter size of square: (1-${
+          canvas.getBoundingClientRect().width
+        }), 0 to cancel`
       );
       if (isNaN(length)) {
         continue;
@@ -1154,11 +1207,8 @@ canvas.addEventListener("click", (e) => {
       }
       validLength = parseInt(length);
     }
-  
-    const square = new Square(
-      [vertexes[0][0], vertexes[0][1]],
-      validLength
-    );
+
+    const square = new Square([vertexes[0][0], vertexes[0][1]], validLength);
     instances.push({
       type: "SQUARE",
       ref: square,
@@ -1169,7 +1219,6 @@ canvas.addEventListener("click", (e) => {
     clickCount = 0;
     vertexes = [];
   }
-  
 
   if (currentAction === "RECTANGLE") {
     vertexes.push([e.clientX, e.clientY]);
@@ -1231,6 +1280,25 @@ canvas.addEventListener("click", (e) => {
 
     clickCount = 0;
     vertexes = [];
+  }
+
+  if (currentAction === "POLYGON") {
+    console.log(vertexes, polygonN);
+    vertexes.push([e.clientX, e.clientY]);
+
+    if (vertexes.length >= polygonN) {
+      const plgn = new Polygon(vertexes);
+      instances.push({
+        type: "POLYGON",
+        ref: plgn,
+      });
+
+      render();
+      refreshLeftColumn();
+
+      clickCount = 0;
+      vertexes = [];
+    }
   }
 });
 

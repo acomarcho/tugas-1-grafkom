@@ -1,8 +1,8 @@
 class Polygon {
   constructor(vertexes) {
-    this.vertexes = this.vertexes;
+    this.vertexes = vertexes;
     this.vertexColors = vertexes.map((_) => {
-      [[0, 0, 0, 1]];
+      return [0, 0, 0, 1];
     });
     this.translation = [0, 0];
     this.rotation = 0;
