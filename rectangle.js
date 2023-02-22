@@ -19,6 +19,10 @@ class Rectangle {
     this.rotation = 0;
   }
 
+  updateVertexes() {
+    this.vertexes = this.generateVertexes(this.vertexes[0]);
+  }
+
   findCentroid() {
     return [
       (this.vertexes[0][0] + this.vertexes[1][0] + this.vertexes[2][0] + this.vertexes[3][0]) / 4,

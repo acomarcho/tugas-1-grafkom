@@ -1012,6 +1012,17 @@ function refreshLeftColumn() {
             instance.type
           })...</h1>
           <div>
+            <h3>Length & width</h3>
+            <div>
+              Length:
+              <input type="range" min="0" max="${canvas.getBoundingClientRect().width}" value="${instanceRef.length}" id="length-slider" />
+            </div>
+            <div>
+              Width:
+              <input type="range" min="0" max="${canvas.getBoundingClientRect().height}" value="${instanceRef.width}" id="width-slider" />
+            </div>
+          </div>
+          <div>
             <h3>Translation</h3>
             <div>
               X:
@@ -1098,6 +1109,22 @@ function refreshLeftColumn() {
               );
               render();
             });
+
+          /* Special model functions */
+          document.querySelector("#length-slider").addEventListener("input", () => {
+            instanceRef.length = parseInt(
+              document.querySelector("#length-slider").value
+            );
+            instanceRef.updateVertexes();
+            render();
+          });
+          document.querySelector("#width-slider").addEventListener("input", () => {
+            instanceRef.width = parseInt(
+              document.querySelector("#width-slider").value
+            );
+            instanceRef.updateVertexes();
+            render();
+          });
 
           /* Event listener untuk rotation (harusnya untuk semua model sama) */
           document.querySelector("#rotate").addEventListener("input", () => {
