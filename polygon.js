@@ -39,6 +39,7 @@ class Polygon {
   addVertex(vertex) {
     this.vertexes.push(vertex);
     this.vertexColors.push([0, 0, 0, 1]);
+    this.toConvexHull();
   }
 
   findCentroid() {
