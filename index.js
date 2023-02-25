@@ -979,17 +979,31 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
+                // Reference for counting distance
+                oldVertexX = instanceRef.vertexes[i][0]
+
                 instanceRef.vertexes[i][0] = parseInt(
                   document.querySelector(`#v${id}-x`).value
                 );
+                // Keeping integrity
+                instanceRef.size += (i == 0 || i == 3)? oldVertexX - instanceRef.vertexes[i][0] : instanceRef.vertexes[i][0] - oldVertexX
+                instanceRef.updateVertexes(i);
+
                 render();
               });
             document
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
+                // Reference for counting distance
+                oldVertexY = instanceRef.vertexes[i][1]
+
                 instanceRef.vertexes[i][1] = parseInt(
                   document.querySelector(`#v${id}-y`).value
                 );
+                // Keeping integrity
+                instanceRef.size += (i == 0 || i == 1)? oldVertexY - instanceRef.vertexes[i][1] : instanceRef.vertexes[i][1] - oldVertexY
+                instanceRef.updateVertexes(i);
+
                 render();
               });
             document
@@ -1168,17 +1182,33 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
+                // Reference for counting distance
+                oldVertexX = instanceRef.vertexes[i][0]
+
                 instanceRef.vertexes[i][0] = parseInt(
                   document.querySelector(`#v${id}-x`).value
                 );
+
+                // Keeping integrity
+                instanceRef.length += (i == 0 || i == 3)? oldVertexX - instanceRef.vertexes[i][0] : instanceRef.vertexes[i][0] - oldVertexX
+                instanceRef.updateVertexes(i);
+
                 render();
               });
             document
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
+                // Reference for counting distance
+                oldVertexY = instanceRef.vertexes[i][1]
+
                 instanceRef.vertexes[i][1] = parseInt(
                   document.querySelector(`#v${id}-y`).value
                 );
+
+                // Keeping integrity
+                instanceRef.width += (i == 0 || i == 1)? oldVertexY - instanceRef.vertexes[i][1] : instanceRef.vertexes[i][1] - oldVertexY
+                instanceRef.updateVertexes(i);
+
                 render();
               });
             document

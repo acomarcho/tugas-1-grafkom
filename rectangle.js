@@ -19,8 +19,8 @@ class Rectangle {
     this.rotation = 0;
   }
 
-  updateVertexes() {
-    this.vertexes = this.generateVertexes(this.vertexes[0]);
+  updateVertexes(ref = null) {
+    this.vertexes = this.generateVertexes(this.vertexes[ref? ref : 0], ref);
   }
 
   findCentroid() {
@@ -30,13 +30,41 @@ class Rectangle {
     ]
   }
 
-  generateVertexes(ref_vertex) {
-    return [
-      [ref_vertex[0], ref_vertex[1]], // Titik 0
-      [ref_vertex[0] + this.length, ref_vertex[1]], // Titik 1
-      [ref_vertex[0] + this.length, ref_vertex[1] + this.width], // Titik 2
-      [ref_vertex[0], ref_vertex[1] + this.width] // Titik 3
-    ]
+  generateVertexes(ref_vertex, ref = null) {
+    switch (ref) {
+      case 1:
+        // Use first vertex as reference
+        return [
+          [ref_vertex[0] - this.length, ref_vertex[1]], // Titik 0
+          [ref_vertex[0], ref_vertex[1]], // Titik 1 -> Reference point
+          [ref_vertex[0], ref_vertex[1] + this.width], // Titik 2
+          [ref_vertex[0] - this.length, ref_vertex[1] + this.width], // Titik 3
+        ];
+      case 2:
+        // Use second vertex as reference
+        return [
+          [ref_vertex[0] - this.length, ref_vertex[1] - this.width], // Titik 0
+          [ref_vertex[0], ref_vertex[1] - this.width], // Titik 1
+          [ref_vertex[0], ref_vertex[1]], // Titik 2 -> Reference Point
+          [ref_vertex[0] - this.length, ref_vertex[1]], // Titik 3
+        ];
+      case 3:
+        // Use third vertex as reference
+        return [
+          [ref_vertex[0], ref_vertex[1] - this.width], // Titik 0
+          [ref_vertex[0] + this.length, ref_vertex[1] - this.width], // Titik 1
+          [ref_vertex[0] + this.length, ref_vertex[1]], // Titik 2
+          [ref_vertex[0], ref_vertex[1]], // Titik 3
+        ];
+      default:
+        // Default method for resizing length (when ref is not given or using 0th vertex)
+        return [
+          [ref_vertex[0], ref_vertex[1]], // Titik 0
+          [ref_vertex[0] + this.length, ref_vertex[1]], // Titik 1
+          [ref_vertex[0] + this.length, ref_vertex[1] + this.width], // Titik 2
+          [ref_vertex[0], ref_vertex[1] + this.width] // Titik 3
+        ]
+    }
   }
 
   getFlattenedVertexes() {
