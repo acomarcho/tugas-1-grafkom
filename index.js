@@ -1258,9 +1258,6 @@ function refreshLeftColumn() {
             <button id="add-vertex">Add vertex</button>
           </div>
           <div>
-            <button id="convex-hull">Convert into convex hull</button>
-          </div>
-          <div>
             <h3>Translation</h3>
             <div>
               X:
@@ -1344,15 +1341,6 @@ function refreshLeftColumn() {
               targetPolygon = idx;
             });
 
-          /* Convex hull */
-          document
-            .querySelector("#convex-hull")
-            .addEventListener("click", () => {
-              instanceRef.toConvexHull();
-              render();
-              clickMyself();
-            })
-
           /* Event listener untuk translation (harusnya untuk semua model sama) */
           document
             .querySelector("#x-translate")
@@ -1398,17 +1386,39 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
+                oldX = instanceRef.vertexes[i][0]
                 instanceRef.vertexes[i][0] = parseInt(
                   document.querySelector(`#v${id}-x`).value
                 );
+
+                // If we move vertex to a point where convex hull throws away the point
+                if (instanceRef.convexHull().length < instanceRef.vertexes.length) {
+                  instanceRef.vertexes[i][0] = oldX
+                  document.querySelector(`#v${id}-x`).value = oldX
+                  window.alert(
+                    "Cannot move this vertex further on the X-axis as a vertex will be deleted"
+                  )
+                }
+
                 render();
               });
             document
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
+                oldY = instanceRef.vertexes[i][1]
                 instanceRef.vertexes[i][1] = parseInt(
                   document.querySelector(`#v${id}-y`).value
                 );
+
+                // If we move vertex to a point where convex hull throws away the point
+                if (instanceRef.convexHull().length < instanceRef.vertexes.length) {
+                  instanceRef.vertexes[i][1] = oldY
+                  document.querySelector(`#v${id}-y`).value = oldY
+                  window.alert(
+                    "Cannot move this vertex further on the Y-axis as a vertex will be deleted"
+                  )
+                }
+
                 render();
               });
             document
@@ -1586,9 +1596,21 @@ canvas.addEventListener("click", (e) => {
 
   if (currentAction === "ADD_VERTEX") {
     const plgnRef = instances[targetPolygon].ref;
+    const initVertexes = [...plgnRef.vertexes];
     plgnRef.addVertex([e.clientX, e.clientY]);
     render();
-
+    
+    // Vertex check
+    if (plgnRef.vertexes.length <= initVertexes.length) {
+      // Check if all previous vertexes are in the new polygon
+      if (plgnRef.vertexes.every((elmt) => { return initVertexes.includes(elmt) })) {
+        // If all the old vertices are in and the new one is not
+        window.alert("Invalid vertex, vertex is located inside the convex hull")
+        return
+      }
+      // else a vertex was deleted to accomodate convex hull
+      window.alert("A previous vertex was deleted to accomodate the new vertex")
+    }
     document.querySelector(`#btn-edit-model-${targetPolygon + 1}`).click();
 
     currentAction = "NONE";

@@ -4,6 +4,7 @@ class Polygon {
     this.vertexColors = vertexes.map((_) => {
       return [0, 0, 0, 1];
     });
+    this.toConvexHull()
     this.translation = [0, 0];
     this.rotation = 0;
   }
@@ -121,7 +122,6 @@ class Polygon {
     }
 
     hull.pop();
-
     return hull;
   }
 
