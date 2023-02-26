@@ -1654,7 +1654,7 @@ canvas.addEventListener("click", (e) => {
 /* Click listener untuk fitur export model */
 document.querySelector("#btn-export-models").addEventListener("click", () => {
   const link = document.createElement("a");
-  const file = new Blob([JSON.stringify(instances)], { type: "text/plain" });
+  const file = new Blob([JSON.stringify(instances, undefined, 2)], { type: "text/plain" });
   link.href = URL.createObjectURL(file);
   link.download = `model-${new Date().toISOString()}.grafkom`;
   link.click();
