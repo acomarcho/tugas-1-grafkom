@@ -1192,6 +1192,10 @@ function refreshLeftColumn() {
                 // Keeping integrity
                 instanceRef.length += (i == 0 || i == 3)? oldVertexX - instanceRef.vertexes[i][0] : instanceRef.vertexes[i][0] - oldVertexX
                 instanceRef.updateVertexes(i);
+                instanceRef.updateWidthLength();
+
+                document.querySelector("#length-slider").value = instanceRef.length.toString();
+                document.querySelector("#width-slider").value = instanceRef.width.toString();
 
                 render();
               });
@@ -1208,6 +1212,10 @@ function refreshLeftColumn() {
                 // Keeping integrity
                 instanceRef.width += (i == 0 || i == 1)? oldVertexY - instanceRef.vertexes[i][1] : instanceRef.vertexes[i][1] - oldVertexY
                 instanceRef.updateVertexes(i);
+                instanceRef.updateWidthLength();
+
+                document.querySelector("#length-slider").value = instanceRef.length.toString();
+                document.querySelector("#width-slider").value = instanceRef.width.toString();
 
                 render();
               });
