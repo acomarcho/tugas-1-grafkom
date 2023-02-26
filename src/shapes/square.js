@@ -16,6 +16,7 @@ class Square {
     this.translation = [0, 0];
     this.rotation = 0;
     this.dilation = 1;
+    this.shear = [0.0, 0.0];
   }
 
   updateVertexes(ref = null) {

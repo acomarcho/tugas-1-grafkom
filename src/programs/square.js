@@ -27,6 +27,10 @@ squareRotationUniformLocation = gl.getUniformLocation(
     squareProgram,
     "u_rotation"
 );
+squareShearUniformLocation = gl.getUniformLocation(
+    squareProgram,
+    "u_shear"
+);
 squareRotationOriginUniformLocation = gl.getUniformLocation(
     squareProgram,
     "u_rotation_origin"

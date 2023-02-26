@@ -209,12 +209,20 @@ function render() {
         squareRef.dilation
       );
 
+      /* Set shear */
+      gl.uniform2f(
+        squareShearUniformLocation,
+        squareRef.shear[0],
+        squareRef.shear[1]
+      );
+
       /* Set rotation */
       gl.uniform2f(
         squareRotationUniformLocation,
         squareRef.getRotationComponents()[0],
         squareRef.getRotationComponents()[1]
       );
+
       /* Set rotation origin */
       const origin = squareRef.findCentroid();
       gl.uniform2f(squareRotationOriginUniformLocation, origin[0], origin[1]);
@@ -809,20 +817,33 @@ function refreshLeftColumn() {
             instanceRef.translation[1]
           }" step="1" id="y-translate">
               </div>
-              <h3>Rotation</h3>
-              <div>
-                Angle:
-                <input type="range" min="0" max="360" value="${
-                  instanceRef.rotation
-                }" step="1" id="rotate">
-              </div>
-              </div>
               <h3>Dilation</h3>
               <div>
                 Scale:
                 <input type="range" min="0.01" max="5.0" value="${
                   instanceRef.dilation
                 }" step="0.01" id="dilate">
+              </div>
+              <h3>Shear-X</h3>
+              <div>
+                Scale:
+                <input type="range" min="-3.0" max="3.0" value="${
+                  instanceRef.shear[0]
+                }" step="0.01" id="shearx">
+              </div>
+              <h3>Shear-Y</h3>
+              <div>
+                Scale:
+                <input type="range" min="-3.0" max="3.0" value="${
+                  instanceRef.shear[1]
+                }" step="0.01" id="sheary">
+              </div>
+              <h3>Rotation</h3>
+              <div>
+                Angle:
+                <input type="range" min="0" max="360" value="${
+                  instanceRef.rotation
+                }" step="1" id="rotate">
               </div>
             `;
 
@@ -919,6 +940,22 @@ function refreshLeftColumn() {
           document.querySelector("#dilate").addEventListener("input", () => {
             instanceRef.dilation = parseFloat(
               document.querySelector("#dilate").value
+            );
+            render();
+          });
+          
+          /* Event listener untuk shear x axis (harusnya untuk semua model sama) */
+          document.querySelector("#shearx").addEventListener("input", () => {
+            instanceRef.shear[0] = parseFloat(
+              document.querySelector("#shearx").value
+            );
+            render();
+          });
+          
+          /* Event listener untuk shear y axis (harusnya untuk semua model sama) */
+          document.querySelector("#sheary").addEventListener("input", () => {
+            instanceRef.shear[1] = parseFloat(
+              document.querySelector("#sheary").value
             );
             render();
           });
