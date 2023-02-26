@@ -7,4 +7,4 @@
 
 ## Cara menjalankan program
 1. Pada folder `src`, buka file `index.html` pada browser Anda.
-2. Referensi cara menjalankan program terletak pada file `laporan-tugas-1-grafkom.pdf` di folder `docs`
+2. Referensi cara menjalankan program terletak pada file `laporan-tugas-1-grafkom.pdf` di folder `doc`
