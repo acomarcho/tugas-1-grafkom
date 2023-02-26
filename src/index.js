@@ -5,15 +5,18 @@ if (!gl) {
   throw new Error("Your browser does not support WebGL!");
 }
 
+
+// Create a universal Fragment Shader
+fragmentShader = createShader(
+  gl,
+  gl.FRAGMENT_SHADER,
+  fragmentShaderScript
+);
+
 /* Create program dan shader */
 /* 1. Untuk line */
 lineVertexShader = createShader(gl, gl.VERTEX_SHADER, lineVertexShaderScript);
-lineFragmentShader = createShader(
-  gl,
-  gl.FRAGMENT_SHADER,
-  lineFragmentShaderScript
-);
-lineProgram = createProgram(gl, lineVertexShader, lineFragmentShader);
+lineProgram = createProgram(gl, lineVertexShader, fragmentShader);
 linePositionAttributeLocation = gl.getAttribLocation(lineProgram, "a_position");
 lineColorAttributeLocation = gl.getAttribLocation(lineProgram, "a_color");
 lineResolutionUniformLocation = gl.getUniformLocation(
@@ -39,12 +42,7 @@ squareVertexShader = createShader(
   gl.VERTEX_SHADER,
   squareVertexShaderScript
 );
-squareFragmentShader = createShader(
-  gl,
-  gl.FRAGMENT_SHADER,
-  squareFragmentShaderScript
-);
-squareProgram = createProgram(gl, squareVertexShader, squareFragmentShader);
+squareProgram = createProgram(gl, squareVertexShader, fragmentShader);
 squarePositionAttributeLocation = gl.getAttribLocation(
   squareProgram,
   "a_position"
@@ -72,12 +70,7 @@ squareColorBuffer = gl.createBuffer();
 
 /* 3. Untuk persegi panjang */
 rectVertexShader = createShader(gl, gl.VERTEX_SHADER, rectVertexShaderScript);
-rectFragmentShader = createShader(
-  gl,
-  gl.FRAGMENT_SHADER,
-  rectFragmentShaderScript
-);
-rectProgram = createProgram(gl, rectVertexShader, rectFragmentShader);
+rectProgram = createProgram(gl, rectVertexShader, fragmentShader);
 rectPositionAttributeLocation = gl.getAttribLocation(rectProgram, "a_position");
 rectColorAttributeLocation = gl.getAttribLocation(rectProgram, "a_color");
 rectResolutionUniformLocation = gl.getUniformLocation(
@@ -99,12 +92,7 @@ rectColorBuffer = gl.createBuffer();
 
 /* 4. Untuk poligon */
 plgnVertexShader = createShader(gl, gl.VERTEX_SHADER, plgnVertexShaderScript);
-plgnFragmentShader = createShader(
-  gl,
-  gl.FRAGMENT_SHADER,
-  plgnFragmentShaderScript
-);
-plgnProgram = createProgram(gl, plgnVertexShader, plgnFragmentShader);
+plgnProgram = createProgram(gl, plgnVertexShader, fragmentShader);
 plgnPositionAttributeLocation = gl.getAttribLocation(plgnProgram, "a_position");
 plgnColorAttributeLocation = gl.getAttribLocation(plgnProgram, "a_color");
 plgnResolutionUniformLocation = gl.getUniformLocation(
