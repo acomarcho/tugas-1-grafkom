@@ -12,6 +12,10 @@ plgnTranslationUniformLocation = gl.getUniformLocation(
     plgnProgram,
     "u_translation"
 );
+plgnDilationUniformLocation = gl.getUniformLocation(
+    plgnProgram,
+    "u_dilation"
+);
 plgnRotationUniformLocation = gl.getUniformLocation(plgnProgram, "u_rotation");
 plgnRotationOriginUniformLocation = gl.getUniformLocation(
     plgnProgram,
