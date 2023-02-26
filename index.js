@@ -1149,6 +1149,14 @@ function refreshLeftColumn() {
             });
 
           /* Special model functions */
+          function syncSlidersWithNewWidthLength() {
+            instanceRef.vertexes.forEach((v, i) => {
+              const id = i + 1;
+              document.querySelector(`#v${id}-x`).value = v[0];
+              document.querySelector(`#v${id}-y`).value = v[1];
+            })
+          }
+
           document
             .querySelector("#length-slider")
             .addEventListener("input", () => {
@@ -1156,6 +1164,7 @@ function refreshLeftColumn() {
                 document.querySelector("#length-slider").value
               );
               instanceRef.updateVertexes();
+              syncSlidersWithNewWidthLength();
               render();
             });
           document
@@ -1165,6 +1174,7 @@ function refreshLeftColumn() {
                 document.querySelector("#width-slider").value
               );
               instanceRef.updateVertexes();
+              syncSlidersWithNewWidthLength();
               render();
             });
 
