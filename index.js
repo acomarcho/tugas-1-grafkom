@@ -1597,7 +1597,7 @@ canvas.addEventListener("click", (e) => {
   if (currentAction === "ADD_VERTEX") {
     const plgnRef = instances[targetPolygon].ref;
     const initVertexes = [...plgnRef.vertexes];
-    plgnRef.addVertex([e.clientX, e.clientY]);
+    plgnRef.addVertex([e.clientX - plgnRef.translation[0], e.clientY - plgnRef.translation[1]]);
     render();
     
     // Vertex check
