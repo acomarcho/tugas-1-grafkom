@@ -52,7 +52,11 @@
         0
       ],
       "rotation": 46,
-      "dilation": 1
+      "dilation": 1,
+      "shear": [
+        0.0,
+        0.0
+      ]
     }
   },
   {
@@ -108,7 +112,11 @@
         0
       ],
       "rotation": 51,
-      "dilation": 1
+      "dilation": 1,
+      "shear": [
+        0.0,
+        0.0
+      ]
     }
   },
   {
@@ -183,7 +191,11 @@
         -34
       ],
       "rotation": 0,
-      "dilation": 1
+      "dilation": 1,
+      "shear": [
+        0.0,
+        0.0
+      ]
     }
   },
   {
@@ -214,7 +226,11 @@
         0
       ],
       "rotation": 0,
-      "dilation": 1
+      "dilation": 1,
+      "shear": [
+        0.0,
+        0.0
+      ]
     }
   },
   {
@@ -245,7 +261,11 @@
         0
       ],
       "rotation": 0,
-      "dilation": 1
+      "dilation": 1,
+      "shear": [
+        0.0,
+        0.0
+      ]
     }
   },
   {
@@ -276,7 +296,11 @@
         0
       ],
       "rotation": 0,
-      "dilation": 1
+      "dilation": 1,
+      "shear": [
+        0.0,
+        0.0
+      ]
     }
   }
 ]
