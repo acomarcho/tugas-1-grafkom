@@ -18,6 +18,10 @@ lineDilationUniformLocation = gl.getUniformLocation(
     "u_dilation"
 );
 lineRotationUniformLocation = gl.getUniformLocation(lineProgram, "u_rotation");
+lineShearUniformLocation = gl.getUniformLocation(
+    lineProgram,
+    "u_shear"
+);
 lineRotationOriginUniformLocation = gl.getUniformLocation(
     lineProgram,
     "u_rotation_origin"

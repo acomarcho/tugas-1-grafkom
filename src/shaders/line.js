@@ -8,6 +8,7 @@ uniform vec2 u_translation;
 uniform vec2 u_rotation;
 uniform vec2 u_rotation_origin;
 uniform vec2 u_dilation;
+uniform vec2 u_shear;
 varying vec4 v_color;
 
 void main() {
@@ -15,9 +16,14 @@ void main() {
 
   vec2 dilatedPosition = substractOrigin * u_dilation;
 
+  vec2 shearedPosition = vec2(
+    dilatedPosition.x + dilatedPosition.x * u_shear.x * u_shear.y + dilatedPosition.y * u_shear.x,
+    dilatedPosition.x * u_shear.y + dilatedPosition.y
+  );
+
   vec2 rotatedPosition = vec2(
-    dilatedPosition.x * u_rotation.y + dilatedPosition.y * u_rotation.x,
-    dilatedPosition.y * u_rotation.y - dilatedPosition.x * u_rotation.x
+    shearedPosition.x * u_rotation.y + shearedPosition.y * u_rotation.x,
+    shearedPosition.y * u_rotation.y - shearedPosition.x * u_rotation.x
   );
 
   vec2 offsetCoordinates = rotatedPosition - u_offset + u_translation + u_rotation_origin;
