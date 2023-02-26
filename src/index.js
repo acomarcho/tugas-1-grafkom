@@ -194,6 +194,14 @@ function render() {
         squareRef.translation[1]
       );
 
+
+      /* Set dilation */
+      gl.uniform2f(
+        squareDilationUniformLocation,
+        squareRef.dilation,
+        squareRef.dilation
+      );
+
       /* Set rotation */
       gl.uniform2f(
         squareRotationUniformLocation,
@@ -772,6 +780,14 @@ function refreshLeftColumn() {
                   instanceRef.rotation
                 }" step="1" id="rotate">
               </div>
+              </div>
+              <h3>Dilation</h3>
+              <div>
+                Scale:
+                <input type="range" min="0.01" max="5.0" value="${
+                  instanceRef.dilation
+                }" step="0.01" id="dilate">
+              </div>
             `;
 
           /* Tambahkan fungsionalitas vertex */
@@ -859,6 +875,14 @@ function refreshLeftColumn() {
           document.querySelector("#rotate").addEventListener("input", () => {
             instanceRef.rotation = parseInt(
               document.querySelector("#rotate").value
+            );
+            render();
+          });
+          
+          /* Event listener untuk dilation (harusnya untuk semua model sama) */
+          document.querySelector("#dilate").addEventListener("input", () => {
+            instanceRef.dilation = parseFloat(
+              document.querySelector("#dilate").value
             );
             render();
           });
