@@ -415,6 +415,13 @@ function render() {
         plgnRef.dilation
       );
 
+      /* Set shear */
+      gl.uniform2f(
+        plgnShearUniformLocation,
+        plgnRef.shear[0],
+        plgnRef.shear[1]
+      );
+
       /* Set rotation */
       gl.uniform2f(
         plgnRotationUniformLocation,
@@ -1389,13 +1396,6 @@ function refreshLeftColumn() {
             instanceRef.translation[1]
           }" step="1" id="y-translate">
             </div>
-            <h3>Rotation</h3>
-            <div>
-              Angle:
-              <input type="range" min="0" max="360" value="${
-                instanceRef.rotation
-              }" step="1" id="rotate">
-            </div>
             <h3>Dilation</h3>
             <div>
               Scale:
@@ -1403,6 +1403,27 @@ function refreshLeftColumn() {
                 instanceRef.dilation
               }" step="0.01" id="dilate">
             </div>
+            <h3>Shear</h3>
+            <div>
+              X:
+              <input type="range" min="-3.0" max="3.0" value="${
+                instanceRef.shear[0]
+              }" step="0.01" id="shearx">
+            </div>
+            <div>
+              Y:
+              <input type="range" min="-3.0" max="3.0" value="${
+                instanceRef.shear[1]
+              }" step="0.01" id="sheary">
+            </div>
+            <h3>Rotation</h3>
+            <div>
+              Angle:
+              <input type="range" min="0" max="360" value="${
+                instanceRef.rotation
+              }" step="1" id="rotate">
+            </div>
+          </div>
           `;
 
           /* Tambahkan fungsionalitas vertex */
@@ -1492,6 +1513,22 @@ function refreshLeftColumn() {
           document.querySelector("#dilate").addEventListener("input", () => {
             instanceRef.dilation = parseFloat(
               document.querySelector("#dilate").value
+            );
+            render();
+          });
+          
+          /* Event listener untuk shear x axis (harusnya untuk semua model sama) */
+          document.querySelector("#shearx").addEventListener("input", () => {
+            instanceRef.shear[0] = parseFloat(
+              document.querySelector("#shearx").value
+            );
+            render();
+          });
+          
+          /* Event listener untuk shear y axis (harusnya untuk semua model sama) */
+          document.querySelector("#sheary").addEventListener("input", () => {
+            instanceRef.shear[1] = parseFloat(
+              document.querySelector("#sheary").value
             );
             render();
           });

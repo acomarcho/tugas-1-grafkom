@@ -17,6 +17,10 @@ plgnDilationUniformLocation = gl.getUniformLocation(
     "u_dilation"
 );
 plgnRotationUniformLocation = gl.getUniformLocation(plgnProgram, "u_rotation");
+plgnShearUniformLocation = gl.getUniformLocation(
+    plgnProgram,
+    "u_shear"
+);
 plgnRotationOriginUniformLocation = gl.getUniformLocation(
     plgnProgram,
     "u_rotation_origin"
