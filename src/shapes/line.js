@@ -7,6 +7,7 @@ class Line {
     this.vertex2_color = [0, 0, 0, 1];
     this.translation = [0, 0];
     this.rotation = 0;
+    this.dilation = 1;
   }
 
   findCentroid() {
