@@ -937,6 +937,14 @@ function refreshLeftColumn() {
           });
 
           /* Special model functions */
+          function syncSlidersWithNewSize() {
+            instanceRef.vertexes.forEach((v, i) => {
+              const id = i + 1;
+              document.querySelector(`#v${id}-x`).value = v[0];
+              document.querySelector(`#v${id}-y`).value = v[1];
+            });
+          }
+
           document
             .querySelector("#length-slider")
             .addEventListener("input", () => {
@@ -944,6 +952,7 @@ function refreshLeftColumn() {
                 document.querySelector("#length-slider").value
               );
               instanceRef.updateVertexes();
+              syncSlidersWithNewSize();
               render();
             });
 
@@ -980,14 +989,21 @@ function refreshLeftColumn() {
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
                 // Reference for counting distance
-                oldVertexX = instanceRef.vertexes[i][0]
+                oldVertexX = instanceRef.vertexes[i][0];
 
                 instanceRef.vertexes[i][0] = parseInt(
                   document.querySelector(`#v${id}-x`).value
                 );
                 // Keeping integrity
-                instanceRef.size += (i == 0 || i == 3)? oldVertexX - instanceRef.vertexes[i][0] : instanceRef.vertexes[i][0] - oldVertexX
+                instanceRef.size +=
+                  i == 0 || i == 3
+                    ? oldVertexX - instanceRef.vertexes[i][0]
+                    : instanceRef.vertexes[i][0] - oldVertexX;
                 instanceRef.updateVertexes(i);
+                instanceRef.updateSize();
+
+                document.querySelector("#length-slider").value =
+                  instanceRef.size.toString();
 
                 render();
               });
@@ -995,13 +1011,16 @@ function refreshLeftColumn() {
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
                 // Reference for counting distance
-                oldVertexY = instanceRef.vertexes[i][1]
+                oldVertexY = instanceRef.vertexes[i][1];
 
                 instanceRef.vertexes[i][1] = parseInt(
                   document.querySelector(`#v${id}-y`).value
                 );
                 // Keeping integrity
-                instanceRef.size += (i == 0 || i == 1)? oldVertexY - instanceRef.vertexes[i][1] : instanceRef.vertexes[i][1] - oldVertexY
+                instanceRef.size +=
+                  i == 0 || i == 1
+                    ? oldVertexY - instanceRef.vertexes[i][1]
+                    : instanceRef.vertexes[i][1] - oldVertexY;
                 instanceRef.updateVertexes(i);
 
                 render();
@@ -1154,7 +1173,7 @@ function refreshLeftColumn() {
               const id = i + 1;
               document.querySelector(`#v${id}-x`).value = v[0];
               document.querySelector(`#v${id}-y`).value = v[1];
-            })
+            });
           }
 
           document
@@ -1193,19 +1212,24 @@ function refreshLeftColumn() {
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
                 // Reference for counting distance
-                oldVertexX = instanceRef.vertexes[i][0]
+                oldVertexX = instanceRef.vertexes[i][0];
 
                 instanceRef.vertexes[i][0] = parseInt(
                   document.querySelector(`#v${id}-x`).value
                 );
 
                 // Keeping integrity
-                instanceRef.length += (i == 0 || i == 3)? oldVertexX - instanceRef.vertexes[i][0] : instanceRef.vertexes[i][0] - oldVertexX
+                instanceRef.length +=
+                  i == 0 || i == 3
+                    ? oldVertexX - instanceRef.vertexes[i][0]
+                    : instanceRef.vertexes[i][0] - oldVertexX;
                 instanceRef.updateVertexes(i);
                 instanceRef.updateWidthLength();
 
-                document.querySelector("#length-slider").value = instanceRef.length.toString();
-                document.querySelector("#width-slider").value = instanceRef.width.toString();
+                document.querySelector("#length-slider").value =
+                  instanceRef.length.toString();
+                document.querySelector("#width-slider").value =
+                  instanceRef.width.toString();
 
                 render();
               });
@@ -1213,19 +1237,24 @@ function refreshLeftColumn() {
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
                 // Reference for counting distance
-                oldVertexY = instanceRef.vertexes[i][1]
+                oldVertexY = instanceRef.vertexes[i][1];
 
                 instanceRef.vertexes[i][1] = parseInt(
                   document.querySelector(`#v${id}-y`).value
                 );
 
                 // Keeping integrity
-                instanceRef.width += (i == 0 || i == 1)? oldVertexY - instanceRef.vertexes[i][1] : instanceRef.vertexes[i][1] - oldVertexY
+                instanceRef.width +=
+                  i == 0 || i == 1
+                    ? oldVertexY - instanceRef.vertexes[i][1]
+                    : instanceRef.vertexes[i][1] - oldVertexY;
                 instanceRef.updateVertexes(i);
                 instanceRef.updateWidthLength();
 
-                document.querySelector("#length-slider").value = instanceRef.length.toString();
-                document.querySelector("#width-slider").value = instanceRef.width.toString();
+                document.querySelector("#length-slider").value =
+                  instanceRef.length.toString();
+                document.querySelector("#width-slider").value =
+                  instanceRef.width.toString();
 
                 render();
               });
@@ -1404,18 +1433,20 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-x`)
               .addEventListener("input", () => {
-                oldX = instanceRef.vertexes[i][0]
+                oldX = instanceRef.vertexes[i][0];
                 instanceRef.vertexes[i][0] = parseInt(
                   document.querySelector(`#v${id}-x`).value
                 );
 
                 // If we move vertex to a point where convex hull throws away the point
-                if (instanceRef.convexHull().length < instanceRef.vertexes.length) {
-                  instanceRef.vertexes[i][0] = oldX
-                  document.querySelector(`#v${id}-x`).value = oldX
+                if (
+                  instanceRef.convexHull().length < instanceRef.vertexes.length
+                ) {
+                  instanceRef.vertexes[i][0] = oldX;
+                  document.querySelector(`#v${id}-x`).value = oldX;
                   window.alert(
                     "Cannot move this vertex further on the X-axis as a vertex will be deleted"
-                  )
+                  );
                 }
 
                 render();
@@ -1423,18 +1454,20 @@ function refreshLeftColumn() {
             document
               .querySelector(`#v${id}-y`)
               .addEventListener("input", () => {
-                oldY = instanceRef.vertexes[i][1]
+                oldY = instanceRef.vertexes[i][1];
                 instanceRef.vertexes[i][1] = parseInt(
                   document.querySelector(`#v${id}-y`).value
                 );
 
                 // If we move vertex to a point where convex hull throws away the point
-                if (instanceRef.convexHull().length < instanceRef.vertexes.length) {
-                  instanceRef.vertexes[i][1] = oldY
-                  document.querySelector(`#v${id}-y`).value = oldY
+                if (
+                  instanceRef.convexHull().length < instanceRef.vertexes.length
+                ) {
+                  instanceRef.vertexes[i][1] = oldY;
+                  document.querySelector(`#v${id}-y`).value = oldY;
                   window.alert(
                     "Cannot move this vertex further on the Y-axis as a vertex will be deleted"
-                  )
+                  );
                 }
 
                 render();
@@ -1615,19 +1648,30 @@ canvas.addEventListener("click", (e) => {
   if (currentAction === "ADD_VERTEX") {
     const plgnRef = instances[targetPolygon].ref;
     const initVertexes = [...plgnRef.vertexes];
-    plgnRef.addVertex([e.clientX - plgnRef.translation[0], e.clientY - plgnRef.translation[1]]);
+    plgnRef.addVertex([
+      e.clientX - plgnRef.translation[0],
+      e.clientY - plgnRef.translation[1],
+    ]);
     render();
-    
+
     // Vertex check
     if (plgnRef.vertexes.length <= initVertexes.length) {
       // Check if all previous vertexes are in the new polygon
-      if (plgnRef.vertexes.every((elmt) => { return initVertexes.includes(elmt) })) {
+      if (
+        plgnRef.vertexes.every((elmt) => {
+          return initVertexes.includes(elmt);
+        })
+      ) {
         // If all the old vertices are in and the new one is not
-        window.alert("Invalid vertex, vertex is located inside the convex hull")
-        return
+        window.alert(
+          "Invalid vertex, vertex is located inside the convex hull"
+        );
+        return;
       }
       // else a vertex was deleted to accomodate convex hull
-      window.alert("A previous vertex was deleted to accomodate the new vertex")
+      window.alert(
+        "A previous vertex was deleted to accomodate the new vertex"
+      );
     }
     document.querySelector(`#btn-edit-model-${targetPolygon + 1}`).click();
 

@@ -21,6 +21,10 @@ class Square {
     this.vertexes = this.generateVertexes(this.vertexes[ref? ref : 0], ref);
   }
 
+  updateSize() {
+    this.size = Math.abs(this.vertexes[0][0] - this.vertexes[1][0]);
+  }
+
   findCentroid() {
     return [
       (this.vertexes[0][0] +
