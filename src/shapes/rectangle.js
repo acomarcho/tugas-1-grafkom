@@ -17,6 +17,7 @@ class Rectangle {
     ];
     this.translation = [0, 0];
     this.rotation = 0;
+    this.dilation = 1;
   }
 
   updateVertexes(ref = null) {

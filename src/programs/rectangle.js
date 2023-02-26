@@ -12,6 +12,10 @@ rectTranslationUniformLocation = gl.getUniformLocation(
     rectProgram,
     "u_translation"
 );
+rectDilationUniformLocation = gl.getUniformLocation(
+    rectProgram,
+    "u_dilation"
+);
 rectRotationUniformLocation = gl.getUniformLocation(rectProgram, "u_rotation");
 rectRotationOriginUniformLocation = gl.getUniformLocation(
     rectProgram,
